@@ -20,24 +20,24 @@ void emit(int token_type, int token_value) /*  generates output  */
             printf("%c\n", token_type);
             break;
         case '/':
-            int a2 = pop(stack);
-            int a1 = pop(stack);
-            push(stack, a1/a2);
+            int b2 = pop(stack);
+            int b1 = pop(stack);
+            push(stack, b1/b2);
             printf("%c\n", token_type);
             break;
         case '=':
             printf("%c\n", token_type);
             break;
         case DIV:
-            int a2 = pop(stack);
-            int a1 = pop(stack);
-            push(stack, a1/a2);
+            int c2 = pop(stack);
+            int c1 = pop(stack);
+            push(stack, c1/c2);
             printf("DIV\n");
             break;
         case MOD:
-            int a2 = pop(stack);
-            int a1 = pop(stack);
-            push(stack, a1%a2);
+            int d2 = pop(stack);
+            int d1 = pop(stack);
+            push(stack, d1%d2);
             printf("MOD\n");
             break;
         case NUM:
