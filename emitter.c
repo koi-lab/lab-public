@@ -10,21 +10,26 @@ void emit(int token_type, int token_value) /*  generates output  */
             printf("%c\n", token_type);
             break;
         case '-':
+            push(stack, pop(stack) - pop(stack));
             printf("%c\n", token_type);
             break;
         case '*':
+            push(stack, pop(stack) * pop(stack));
             printf("%c\n", token_type);
             break;
         case '/':
+            push(stack, pop(stack) / pop(stack));
             printf("%c\n", token_type);
             break;
         case '=':
             printf("%c\n", token_type);
             break;
         case DIV:
+            push(stack, pop(stack) / pop(stack));
             printf("DIV\n");
             break;
         case MOD:
+            push(stack, pop(stack) % pop(stack));
             printf("MOD\n");
             break;
         case NUM:
