@@ -25,6 +25,7 @@ struct symentry {  /*  form of symbol table entry  */
     int  token_type;    
     int  value;
     bool  initialized;
+    bool assignee;
 };
 
 extern struct symentry symtable[];  /* symbol table  */
@@ -41,12 +42,14 @@ extern void emit (int token_type, int token_value);  /*  generates output  */
 
 #define MAX_STACK_SIZE 100
 
-typedef struct {
+typedef struct Stack {
     int data[MAX_STACK_SIZE];
     int top;
 } Stack;
 
-void initialize(Stack* stack);
-void push(Stack* stack, int value);
-int pop(Stack* stack);
-int peek(Stack* stack);
+extern Stack *stack;
+
+extern void initialize(Stack* stack);
+extern void push(Stack* stack, int value);
+extern int pop(Stack* stack);
+extern int peek(Stack* stack);

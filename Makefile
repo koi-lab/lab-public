@@ -1,5 +1,5 @@
-OBJECTS = lexer.o parser.o emitter.o symbol.o init.o error.o main.o 
-SOURCES = lexer.c parser.c emitter.c symbol.c init.c error.c main.c
+OBJECTS = stack.o lexer.o parser.o emitter.o symbol.o init.o error.o main.o 
+SOURCES = stack.c lexer.c parser.c emitter.c symbol.c init.c error.c main.c 
 EXE = infix2postfix
 CFLAGS += -Wall -g
 

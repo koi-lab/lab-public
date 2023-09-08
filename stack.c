@@ -5,7 +5,7 @@ void initialize(Stack* stack) {
 }
 
 void push(Stack* stack, int value) {
-    if (isFull(stack)) {
+    if (stack->top >= MAX_STACK_SIZE) {
         printf("Stack overflow\n");
         return;
     }
@@ -13,7 +13,7 @@ void push(Stack* stack, int value) {
 }
 
 int pop(Stack* stack) {
-    if (isEmpty(stack)) {
+    if (stack->top < 0) {
         printf("Stack underflow\n");
         return -1;
     }
@@ -21,7 +21,7 @@ int pop(Stack* stack) {
 }
 
 int peek(Stack* stack) {
-    if (isEmpty(stack)) {
+    if (stack->top < 0) {
         printf("Stack is empty\n");
         return -1;
     }
