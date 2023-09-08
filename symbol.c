@@ -21,5 +21,7 @@ int insert(char *s, int token_type)    /*  returns position of entry for s */
         error("Symbol table full");
     symtable[nr_symbols].token_type = token_type;
     symtable[nr_symbols].lexeme = strdup(s);
+    symtable[nr_symbols].value = 0;
+    symtable[nr_symbols].initialized = false;
     return nr_symbols++;
 }

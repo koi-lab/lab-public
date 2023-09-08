@@ -27,6 +27,9 @@ init.o: 	init.c global.h
 error.o: 	error.c global.h
 	gcc $(CFLAGS) -c error.c
 
+stack.o: 	stack.c global.h
+	gcc $(CFLAGS) -c stack.c
+
 clean: 
 	rm -f $(EXE) $(OBJECTS) 29.tar.gz 29.zip *~
 
