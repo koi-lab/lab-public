@@ -25,7 +25,7 @@ struct symentry {  /*  form of symbol table entry  */
     int  token_type;    
     int  value;
     bool  initialized;
-    bool assignee;
+    bool theVariableThatIsGoingToBeAssignedAValue;
 };
 
 extern struct symentry symtable[];  /* symbol table  */

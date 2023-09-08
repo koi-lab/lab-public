@@ -32,7 +32,7 @@ void emit(int token_type, int token_value) /*  generates output  */
             printf("%d\n", token_value);
             break;
         case ID:
-            if (symtable[token_value].assignee) {
+            if (symtable[token_value].theVariableThatIsGoingToBeAssignedAValue) {
                 // do nothing.
             }
             else {
