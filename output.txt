@@ -24,3 +24,8 @@ c
 -
 =
 'd' now has a value of 21.
+a
+d
+19
+-
+^
