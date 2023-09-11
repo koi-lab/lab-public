@@ -25,7 +25,10 @@ c
 =
 'd' now has a value of 21.
 a
+15
+-
 d
 19
 -
 ^
+Result of the expressions is 9.
