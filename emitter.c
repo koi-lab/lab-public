@@ -25,6 +25,12 @@ void emit(int token_type, int token_value) /*  generates output  */
             push(stack, b1/b2);
             printf("%c\n", token_type);
             break;
+        case '^':
+            int e2 = pop(stack);
+            int e1 = pop(stack);
+            push(stack, pow(e1, e2));
+            printf("%c\n", token_type);
+            break;
         case '=':
             printf("%c\n", token_type);
             break;
