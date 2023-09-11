@@ -16,3 +16,11 @@ c
 +
 =
 'a' now has a value of 18.
+d
+c
+2
+^
+100
+-
+=
+'d' now has a value of 21.

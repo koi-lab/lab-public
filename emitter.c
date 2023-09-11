@@ -2,6 +2,16 @@
 
 #include "global.h"
 
+int power(int x, int y) {
+    int result = 1;
+
+    for (int i = 0; i < y; ++i) {
+        result *= x;
+    }
+
+    return result;
+}
+
 void emit(int token_type, int token_value) /*  generates output  */
 {
     switch (token_type) {
@@ -28,7 +38,7 @@ void emit(int token_type, int token_value) /*  generates output  */
         case '^':
             int e2 = pop(stack);
             int e1 = pop(stack);
-            push(stack, pow(e1, e2));
+            push(stack, power(e1, e2));
             printf("%c\n", token_type);
             break;
         case '=':
