@@ -53,3 +53,4 @@ extern void initialize(Stack* stack);
 extern void push(Stack* stack, int value);
 extern int pop(Stack* stack);
 extern int peek(Stack* stack);
+extern void printStack(Stack* stack);

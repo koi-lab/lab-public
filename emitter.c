@@ -14,12 +14,13 @@ int power(int x, int y) {
 
 void emit(int token_type, int token_value) /*  generates output  */
 {
+    printStack(stack);
     switch (token_type) {
         case '+':
             push(stack, pop(stack) + pop(stack));
             printf("%c\n", token_type);
             break;
-        case '-':
+        case '-': ;
             int a2 = pop(stack);
             int a1 = pop(stack);
             push(stack, a1 - a2);
@@ -29,13 +30,13 @@ void emit(int token_type, int token_value) /*  generates output  */
             push(stack, pop(stack) * pop(stack));
             printf("%c\n", token_type);
             break;
-        case '/':
+        case '/': ;
             int b2 = pop(stack);
             int b1 = pop(stack);
             push(stack, b1/b2);
             printf("%c\n", token_type);
             break;
-        case '^':
+        case '^': ;
             int e2 = pop(stack);
             int e1 = pop(stack);
             push(stack, power(e1, e2));
@@ -44,13 +45,13 @@ void emit(int token_type, int token_value) /*  generates output  */
         case '=':
             printf("%c\n", token_type);
             break;
-        case DIV:
+        case DIV: ;
             int c2 = pop(stack);
             int c1 = pop(stack);
             push(stack, c1/c2);
             printf("DIV\n");
             break;
-        case MOD:
+        case MOD: ;
             int d2 = pop(stack);
             int d1 = pop(stack);
             push(stack, d1%d2);
