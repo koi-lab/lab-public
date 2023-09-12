@@ -14,7 +14,7 @@ int power(int x, int y) {
 
 void emit(int token_type, int token_value) /*  generates output  */
 {
-    printStack(stack);
+    // printStack(stack);
     switch (token_type) {
         case '+':
             push(stack, pop(stack) + pop(stack));
