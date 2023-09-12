@@ -5,7 +5,7 @@ c
 /
 +
 =
-'c' now has a value of 11.
+'c' is now 11.
 a
 c
 1
@@ -15,7 +15,7 @@ c
 *
 +
 =
-'a' now has a value of 18.
+'a' is now 18.
 d
 c
 2
@@ -23,7 +23,7 @@ c
 100
 -
 =
-'d' now has a value of 21.
+'d' is now 21.
 e
 a
 15
@@ -33,7 +33,7 @@ d
 -
 ^
 =
-'e' now has a value of 9.
+'e' is now 9.
 5
 98
 +
@@ -65,15 +65,15 @@ The result of the expression is 4096.
 two
 2
 =
-'two' now has a value of 2.
+'two' is now 2.
 three
 3
 =
-'three' now has a value of 3.
+'three' is now 3.
 four
 4
 =
-'four' now has a value of 4.
+'four' is now 4.
 shouldBe0
 two
 three
@@ -83,7 +83,7 @@ four
 4096
 MOD
 =
-'shouldBe0' now has a value of 0.
+'shouldBe0' is now 0.
 1
 2
 +
