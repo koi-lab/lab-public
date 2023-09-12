@@ -29,14 +29,9 @@ int peek(Stack* stack) {
 }
 
 void printStack(Stack* stack) {
-    if (stack->top < 0) {
-        printf("  Stack is empty.\n");
-        return;
-    }
-
     printf("  Stack elements: ");
     for (int i = stack->top; i >= 0; i--) {
-        printf("%d", stack->data[i]);
+        printf("%d ", stack->data[i]);
     }
     printf("\n");
 }
