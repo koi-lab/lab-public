@@ -121,4 +121,4 @@ MOD
 2
 ^
 DIV
-The result of the expression is 2.
+The result of the expression is 10.
