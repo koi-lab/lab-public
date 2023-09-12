@@ -7,3 +7,10 @@ e = (a - 15) ^ (d  - 19);
 8/2-45;
 
 (1 * 2 / 2) ^ 3 - 2;
+
+2^3^4;
+
+two = 2;
+three = 3;
+four = 4;
+shouldBe0 = two^three^four mod 4096;
