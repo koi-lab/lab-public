@@ -34,3 +34,15 @@ d
 ^
 =
 'e' now has a value of 9.
+5
+98
++
+90
+-
+Result of the expression is 13.
+8
+2
+/
+45
+-
+Result of the expression is -41.
