@@ -14,3 +14,5 @@ two = 2;
 three = 3;
 four = 4;
 shouldBe0 = two^three^four mod 4096;
+
+(1 + 2) ^ ((2^2) / 2 div 2 - 0);
