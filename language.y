@@ -19,14 +19,23 @@ list: assignment ';' { printf("\n"); } list
 
 assignment: ID { printf("%s", symtable[token_value].lexeme); } '=' expr { printf("="); }
 
-expr: expr '+' term { printf("+"); }
-       | term
+expr: term moreterms
+      ;
+
+moreterms: '+' term { printf("+"); } moreterms
+         | '-' term { printf("-"); } moreterms
+         | /* empty */
+         ;
+
+term: factor morefactors
        ;
 
-term: term '*' factor { printf("*"); }
-       | term MOD factor { printf("MOD"); }
-       | factor
-       ;
+morefactors: '*' factor { printf("*"); } morefactors
+           | '/' factor { printf("/"); } morefactors
+           | DIV factor { printf("DIV"); } morefactors
+           | MOD factor { printf("MOD"); } morefactors
+           | /* empty */
+           ;
 
 factor: '(' expr ')'
        | ID { printf("%s", symtable[token_value].lexeme); }
