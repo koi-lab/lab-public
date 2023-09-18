@@ -7,7 +7,7 @@ $(EXE):	$(OBJECTS)
 	gcc $(CFLAGS) -o $(EXE) $(OBJECTS)
 
 main.o: 	main.c global.h
-	gcc $(CFLAGS) -c main.c
+	gcc $(CFLAGS) -c main.c 
 
 lexer.o: 	lexer.c global.h
 	gcc $(CFLAGS) -c lexer.c
