@@ -12,7 +12,7 @@
 start: list DONE
         ;
 
-list: expr ';' list
+list: expr ';' { printf("\n"); } list
         | /* empty */
         ;
 

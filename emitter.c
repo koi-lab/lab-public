@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+Stack *stack;
+
 int power(int x, int y) {
     int result = 1;
 
