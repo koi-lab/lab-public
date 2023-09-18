@@ -72,7 +72,7 @@ void emit(int token_type, int token_value) /*  generates output  */
                     push(stack, symtable[token_value].value);
                 }
                 else {
-                    error("️❗️ Used uninitialized variable.");
+                    error("️❗️ooeeue Used uninitialized variable.");
                 }
             }
             printf("%s\n", symtable[token_value].lexeme);

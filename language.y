@@ -3,6 +3,8 @@
   #include "global.h"
   extern int token_value;
   extern void yyerror(char*);
+
+  int symbol_index;
 %}
 
 %token DONE ID NUM DIV MOD
@@ -14,14 +16,17 @@
 %%
 
 start: list DONE
-        ;
+       ;
 
 list: assignment ';' { printf("\n'thetuhethut' is now \n\n"); } list
         | expr ';' { printf("\nThe result of the expression is %d.\n\n", $1); } list
         | /* empty */
         ;
 
-assignment: ID { printf("%s", symtable[token_value].lexeme); } '=' expr { printf("="); } {  }
+assignment: {
+   symbol_index = token_value;
+   symtable[symbol_index].theVariableThatIsGoingToBeAssignedAValue = true;
+    } ID { printf("%s", symtable[symbol_index].lexeme); } '=' expr { printf("="); } {  }
 
 expr: '(' expr ')'      { $$ = $2; }
     | expr '+' expr     { $$ = $1 + $3; printf("+ "); }
@@ -33,11 +38,11 @@ expr: '(' expr ')'      { $$ = $2; }
     | expr '^' expr     { $$ = $1 ^ $3; printf("^ "); }
     | NUM               { $$ = token_value; { printf("%d ", token_value); } }
     | ID  {
-      if (!symtable[token_value].initialized) {
-        yyerror("❗️ Used uninitialized variable.");
+      if (symtable[symbol_index].theVariableThatIsGoingToBeAssignedAValue || symtable[symbol_index].initialized) {
       }
-      else {
         printf("%s ", symtable[token_value].lexeme);
+      else {
+        yyerror("❗️ Used uninitialized variable.");
       }
     }
     ;
