@@ -4,6 +4,7 @@
   #include "global.h"
   extern int token_value;
   extern void yyerror(char*);
+  int yylex(void);
 
   int symbol_index;
 %}
