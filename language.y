@@ -19,15 +19,12 @@
 start: list DONE
        ;
 
-list: assignment ';' { printf("\n'thetuhethut' is now \n\n"); } list
+list: assignment ';' { printf("\n is now %d.\n\n", $1); } list
         | expr ';' { printf("\nThe result of the expression is %d.\n\n", $1); } list
         | /* empty */
         ;
 
-assignment: {
-   symbol_index = token_value;
-   symtable[symbol_index].theVariableThatIsGoingToBeAssignedAValue = true;
-    } ID { printf("%s", symtable[symbol_index].lexeme); } '=' expr { printf("="); } {  }
+assignment: ID '=' expr { printf("="); } { $$ = $3;}
 
 expr: '(' expr ')'      { $$ = $2; }
     | expr '+' expr     { $$ = $1 + $3; printf("+ "); }
@@ -38,14 +35,7 @@ expr: '(' expr ')'      { $$ = $2; }
     | expr MOD expr     { $$ = $1 % $3; printf("MOD "); }
     | expr '^' expr     { $$ = pow($1, $3); printf("^ "); }
     | NUM               { $$ = token_value; { printf("%d ", token_value); } }
-    | ID  {
-      if (symtable[symbol_index].theVariableThatIsGoingToBeAssignedAValue || symtable[symbol_index].initialized) {
-        printf("%s ", symtable[token_value].lexeme);
-      }
-      else {
-        yyerror("❗️ Used uninitialized variable.");
-      }
-    }
+    | ID  
     ;
 %%
 
