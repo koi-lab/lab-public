@@ -12,9 +12,12 @@
 start: list DONE
         ;
 
-list: expr ';' { printf("\n"); } list
+list: assignment ';' { printf("\n"); } list
+        | expr ';' { printf("\n"); } list
         | /* empty */
         ;
+
+assignment: ID { printf("%s", symtable[token_value].lexeme); } '=' expr { printf("="); }
 
 expr: expr '+' term { printf("+"); }
        | term
