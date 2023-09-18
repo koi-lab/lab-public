@@ -1,2 +1,4 @@
 *.o
 infix2postfix
+language.tab.c
+language.tab.h

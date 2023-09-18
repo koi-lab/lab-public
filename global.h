@@ -5,17 +5,12 @@
 #include <stdlib.h> /* ... and for some standard routines, such as exit */
 #include <string.h> /* ... and for string routines */
 #include <stdbool.h>
+#include "language.tab.h"
 
 #define MAX_ID_LENGTH  128  /* for the buffer size */
 
 #define NONE   -1
 #define EOS    '\0'
-
-#define NUM    256
-#define DIV    257
-#define MOD    258
-#define ID     259
-#define DONE   260
 
 extern int token_value;   /*  value of token attribute */  
 extern int lineno;
