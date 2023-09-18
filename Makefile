@@ -1,10 +1,10 @@
 OBJECTS = language.tab.o stack.o lexer.o parser.o emitter.o symbol.o init.o error.o main.o 
 SOURCES = language.tab.c stack.c lexer.c parser.c emitter.c symbol.c init.c error.c main.c 
 EXE = infix2postfix
-CFLAGS += -Wall -g
+CFLAGS += -Wall -g -lm
 
 $(EXE):	$(OBJECTS)
-	gcc $(CFLAGS) -o $(EXE) $(OBJECTS)
+	gcc -o $(EXE) $(OBJECTS) $(CFLAGS)
 
 language.tab.c language.tab.h: language.y
 	bison -d language.y
