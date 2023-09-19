@@ -37,7 +37,7 @@ shouldBe0 two three ^ four ^ 4096 MOD =
 1 2 + 2 2 ^ 2 / 2 DIV 0 - ^ 
 The result of the expression is 3.
 
-2 3 ^ 4 * 5 6 2 ^ 1 ^ * 5 2 ^ MOD 100 * 10 2 ^ DIV 
+2 3 ^ 4 * 5 * 6 2 ^ 1 ^ * 5 2 ^ MOD 100 * 10 2 ^ DIV 
 The result of the expression is 10.
 
 2 3 4 * ^ 6 2 ^ 1 5 MOD ^ 2 ^ * 100 * 10 2 ^ DIV 

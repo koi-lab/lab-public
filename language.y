@@ -29,7 +29,7 @@ assignment: ID { symtable[$1].theVariableThatIsGoingToBeAssignedAValue = true; p
             symtable[$1].value = $4; 
             symtable[$1].initialized = true;
             symtable[$1].theVariableThatIsGoingToBeAssignedAValue = false;
-            printf("=\n%s is now %d.\n\n", symtable[$1].lexeme, $4); }
+            printf("= \n'%s' is now %d.\n\n", symtable[$1].lexeme, $4); }
           ;
 
 expr: '(' expr ')'      { $$ = $2; }
