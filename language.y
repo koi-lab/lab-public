@@ -56,6 +56,7 @@ expr: '(' expr ')'      { $$ = $2; }
 
 void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);
+    exit(1);
 }
 
 int yylex(void) {
