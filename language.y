@@ -20,18 +20,16 @@
 start: list DONE
        ;
 
-list: assignment ';' { printf("is now %d.\n\n", $1); } list
+list: assignment ';' list
         | expr ';' { printf("\nThe result of the expression is %d.\n\n", $1); } list
         | /* empty */
         ;
 
-assignment: ID { symtable[$1].theVariableThatIsGoingToBeAssignedAValue = true; } '=' expr { 
-            printf("= \n%s ", symtable[$1].lexeme); 
-            symtable[$1].theVariableThatIsGoingToBeAssignedAValue = false;
-            symtable[$1].initialized = true;
+assignment: ID { symtable[$1].theVariableThatIsGoingToBeAssignedAValue = true; printf("%s ", symtable[$1].lexeme); } '=' expr {  
             symtable[$1].value = $3; 
-            $$ = $3;
-            printf("%d", $3); }
+            symtable[$1].initialized = true;
+            symtable[$1].theVariableThatIsGoingToBeAssignedAValue = false;
+            printf("=\n%s is now %d.\n\n", symtable[$1].lexeme, $4); }
           ;
 
 expr: '(' expr ')'      { $$ = $2; }
@@ -42,7 +40,7 @@ expr: '(' expr ')'      { $$ = $2; }
     | expr DIV expr     { $$ = $1 / $3; printf("DIV "); }
     | expr MOD expr     { $$ = $1 % $3; printf("MOD "); }
     | expr '^' expr     { $$ = pow($1, $3); printf("^ "); }
-    | NUM               { $$ = token_value; { printf("%d ", $1); } }
+    | NUM               { printf("%d ", $1); }
     | ID                { if (symtable[$1].initialized || symtable[$1].theVariableThatIsGoingToBeAssignedAValue) 
                             { 
                               $$ = symtable[$1].value; 
