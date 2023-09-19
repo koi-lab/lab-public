@@ -45,7 +45,9 @@ void yyerror(char *s) {
 }
 
 int yylex(void) {
-  return lexan();
+  int tokentype = lexan();
+  yylval = token_value;
+  return tokentype;
 }
 
 void parse() {
