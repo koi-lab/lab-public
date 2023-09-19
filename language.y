@@ -26,7 +26,7 @@ list: assignment ';' list
         ;
 
 assignment: ID { symtable[$1].theVariableThatIsGoingToBeAssignedAValue = true; printf("%s ", symtable[$1].lexeme); } '=' expr {  
-            symtable[$1].value = $3; 
+            symtable[$1].value = $4; 
             symtable[$1].initialized = true;
             symtable[$1].theVariableThatIsGoingToBeAssignedAValue = false;
             printf("=\n%s is now %d.\n\n", symtable[$1].lexeme, $4); }
@@ -44,7 +44,7 @@ expr: '(' expr ')'      { $$ = $2; }
     | ID                { if (symtable[$1].initialized || symtable[$1].theVariableThatIsGoingToBeAssignedAValue) 
                             { 
                               $$ = symtable[$1].value; 
-                              printf("%d ", symtable[$1].value); 
+                              printf("%s ", symtable[$1].lexeme); 
                             } 
                           else 
                             {
