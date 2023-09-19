@@ -1,37 +1,34 @@
-OBJECTS = language.tab.o stack.o lexer.o parser.o emitter.o symbol.o init.o error.o main.o 
-SOURCES = language.tab.c stack.c lexer.c parser.c emitter.c symbol.c init.c error.c main.c 
+OBJECTS = language.tab.o stack.o lexer.o parser.o symbol.o init.o error.o main.o 
+SOURCES = language.tab.cpp stack.cpp lexer.cpp parser.cpp symbol.cpp init.cpp error.cpp main.cpp 
 EXE = infix2postfix
 CFLAGS += -Wall -g -lm
 
 $(EXE):	$(OBJECTS)
 	gcc -o $(EXE) $(OBJECTS) $(CFLAGS)
 
-language.tab.c language.tab.h: language.y
-	bison -d language.y
+language.tab.cpp language.tab.hpp: language.ypp
+	bison -d language.ypp
 
-main.o: 	main.c global.h
-	gcc $(CFLAGS) -c main.c 
+main.o: 	main.cpp global.h
+	gcc $(CFLAGS) -c main.cpp 
 
-lexer.o: 	lexer.c global.h
-	gcc $(CFLAGS) -c lexer.c
+lexer.o: 	lexer.cpp global.h
+	gcc $(CFLAGS) -c lexer.cpp
 
-parser.o: 	parser.c global.h
-	gcc $(CFLAGS) -c parser.c
+parser.o: 	parser.cpp global.h
+	gcc $(CFLAGS) -c parser.cpp
 
-emitter.o: 	emitter.c global.h
-	gcc $(CFLAGS) -c emitter.c
+symbol.o: 	symbol.cpp global.h
+	gcc $(CFLAGS) -c symbol.cpp
 
-symbol.o: 	symbol.c global.h
-	gcc $(CFLAGS) -c symbol.c
+init.o: 	init.cpp global.h
+	gcc $(CFLAGS) -c init.cpp
 
-init.o: 	init.c global.h
-	gcc $(CFLAGS) -c init.c
+error.o: 	error.cpp global.h
+	gcc $(CFLAGS) -c error.cpp
 
-error.o: 	error.c global.h
-	gcc $(CFLAGS) -c error.c
-
-stack.o: 	stack.c global.h
-	gcc $(CFLAGS) -c stack.c
+stack.o: 	stack.cpp global.h
+	gcc $(CFLAGS) -c stack.cpp
 
 clean: 
 	rm -f $(EXE) $(OBJECTS) 29.tar.gz 29.zip *~
