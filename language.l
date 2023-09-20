@@ -1,0 +1,56 @@
+%{
+  #include "global.h"
+  #include "language.tab.h"
+  int install_id(char* s, int n);
+  extern int yylval;
+  int  token_value = NONE;
+  int  lineno = 1;
+%}
+
+delim	[\t\n]
+ws	{delim}+
+letter	[A-Za-z]
+digit	[0-9]
+id	{letter}({letter}|{digit})*
+
+%%
+
+{ws}	{ /* no action and no return */ }
+"mod"      { return MOD; }
+"div"      { return DIV; }
+{id}	{ yylval = install_id(yytext, yyleng);
+          return ID; }
+"="       { return EQUAL; }
+"?"       { return QUESTIONMARK; }
+":"       { return COLON; }
+"&"       { return AMPERSAND; }
+"|"       { return PIPE; }
+">"       { return GREATERTHAN; }
+"<"       { return LESSTHAN; }
+"%"       { return PERCENT; }
+"^"       { return CARET; }
+"("       { return LPAREN; }
+")"       { return RPAREN; }
+"+"       { return PLUS; }
+"-"       { return MINUS; }
+"*"       { return STAR; }
+"/"       { return SLASH; }
+";"       { return SEMICOLON; }
+\n        { return NEWLINE; }
+[0-9]+    { yylval = atoi(yytext); return NUM; }
+.        
+
+%%
+
+int install_id(char* s, int n) {
+    int id_number = lookup(s);
+    if (id_number == -1)
+        id_number = insert(s, ID);
+    token_value = id_number;
+
+    return id_number;
+}
+
+int yywrap() {
+  return 1;
+}
