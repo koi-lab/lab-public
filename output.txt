@@ -42,3 +42,12 @@ The result of the expression is 10.
 
 2 3 4 * ^ 6 2 ^ 1 5 MOD ^ 2 ^ * 100 * 10 2 ^ DIV 
 The result of the expression is 5308416.
+
+2 3 < 100 200 ?: 
+The result of the expression is 100.
+
+15 10 & 
+The result of the expression is 10.
+
+15 10 | 
+The result of the expression is 15.
