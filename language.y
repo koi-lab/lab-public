@@ -11,8 +11,11 @@
 
 %token DONE ID NUM DIV MOD
 %left '='
+%left '?' ':'
+%left '|' '&'
+%left '>' '<'
 %left '+' '-'
-%left '*' '/' DIV MOD
+%left '*' '/' DIV MOD '%'
 %left '^'
 
 %%
@@ -33,12 +36,18 @@ assignment: ID { symtable[$1].theVariableThatIsGoingToBeAssignedAValue = true; p
           ;
 
 expr: '(' expr ')'      { $$ = $2; }
+    | expr '?' expr ':' expr     { $$ = $1 ? $3 : $5; printf("?: "); }
+    | expr '&' expr     { $$ = $1 & $3; printf("& "); }
+    | expr '|' expr     { $$ = $1 | $3; printf("| "); }
+    | expr '>' expr     { $$ = $1 > $3; printf("> "); }
+    | expr '<' expr     { $$ = $1 < $3; printf("< "); }
     | expr '+' expr     { $$ = $1 + $3; printf("+ "); }
     | expr '-' expr     { $$ = $1 - $3; printf("- "); }
     | expr '*' expr     { $$ = $1 * $3; printf("* "); }
     | expr '/' expr     { $$ = $1 / $3; printf("/ "); }
     | expr DIV expr     { $$ = $1 / $3; printf("DIV "); }
     | expr MOD expr     { $$ = $1 % $3; printf("MOD "); }
+    | expr '%' expr     { $$ = $1 % $3; printf("%% "); }
     | expr '^' expr     { $$ = pow($1, $3); printf("^ "); }
     | NUM               { printf("%d ", $1); }
     | ID                { if (symtable[$1].initialized || symtable[$1].theVariableThatIsGoingToBeAssignedAValue) 
