@@ -1,6 +1,10 @@
 %{
-  #include "language.tab.h" // Def. of token codes: LT, LE, ELSE etc.
+  #include "global.h"
+  #include "language.tab.h"
+  int install_id(char* s, int n);
   extern int yylval;
+  int  token_value = NONE;
+  int  lineno = 1;
 %}
 
 delim	[\t\n]
@@ -12,6 +16,8 @@ id	{letter}({letter}|{digit})*
 %%
 
 {ws}	{ /* no action and no return */ }
+"mod"      { return MOD; }
+"div"      { return DIV; }
 {id}	{ yylval = install_id(yytext, yyleng);
           return ID; }
 "="       { return EQUAL; }
@@ -29,31 +35,22 @@ id	{letter}({letter}|{digit})*
 "-"       { return MINUS; }
 "*"       { return STAR; }
 "/"       { return SLASH; }
+";"       { return SEMICOLON; }
 \n        { return NEWLINE; }
 [0-9]+    { yylval = atoi(yytext); return NUM; }
-.         { printf("Ignoring invalid character '%s'\n", yytext); }
+.        
 
 %%
 
 int install_id(char* s, int n) {
-  printf("Inserting into symbol table: '%s'\n", s);
-  // ...
-}
+    int id_number = lookup(s);
+    if (id_number == -1)
+        id_number = insert(s, ID);
+    token_value = id_number;
 
-int install_num(char* s, int n) {
-  double d;
-  sscanf(s, "%lf", &d);
-  printf("Found a number: %f\n", d);
-  // ...
+    return id_number;
 }
 
 int yywrap() {
-  printf("Calling yywrap...\n");
   return 1;
-}
-
-int main() {
-  while (1)
-    yylex();
-  return 0;
 }

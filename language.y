@@ -5,11 +5,9 @@
   extern int token_value;
   extern void yyerror(char*);
   int yylex(void);
-
-  int symbol_index;
 %}
 
-%token DONE ID NUM DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH DIV MOD PERCENT CARET
+%token DONE ID NUM DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON
 %left EQUAL
 %left QUESTIONMARK COLON
 %left PIPE AMPERSAND
@@ -23,12 +21,12 @@
 start: list DONE
        ;
 
-list: assignment ';' list
-        | expr ';' { printf("\nThe result of the expression is %d.\n\n", $1); } list
+list: assignment SEMICOLON list
+        | expr SEMICOLON { printf("\nThe result of the expression is %d.\n\n", $1); } list
         | /* empty */
         ;
 
-assignment: ID { symtable[$1].theVariableThatIsGoingToBeAssignedAValue = true; printf("%s ", symtable[$1].lexeme); } '=' expr {  
+assignment: ID { symtable[$1].theVariableThatIsGoingToBeAssignedAValue = true; printf("%s ", symtable[$1].lexeme); } EQUAL expr {  
             symtable[$1].value = $4; 
             symtable[$1].initialized = true;
             symtable[$1].theVariableThatIsGoingToBeAssignedAValue = false;
@@ -66,12 +64,6 @@ expr: LPAREN expr RPAREN      { $$ = $2; }
 void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);
     exit(1);
-}
-
-int yylex(void) {
-  int tokentype = lexan();
-  yylval = token_value;
-  return tokentype;
 }
 
 void parse() {
