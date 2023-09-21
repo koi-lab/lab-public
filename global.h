@@ -31,7 +31,6 @@ extern int lexan();  /*  lexical analyzer  */
 extern void parse();  /*  parses and translates expression list  */
 extern int insert(char *s, int token_type);    /*  returns position of entry for s */
 extern int lookup(char *s);         /* returns position of entry for s, or -1 if not found */
-extern void emit (int token_type, int token_value);  /*  generates output  */
 
 
 
