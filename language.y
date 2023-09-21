@@ -33,21 +33,21 @@ assignment: ID { symtable[$1].theVariableThatIsGoingToBeAssignedAValue = true; p
             printf("= \n'%s' is now %d.\n\n", symtable[$1].lexeme, $4); }
           ;
 
-expr: LPAREN expr RPAREN      { $$ = $2; }
+expr: LPAREN expr RPAREN                    { $$ = $2; }
     | expr QUESTIONMARK expr COLON expr     { $$ = $1 ? $3 : $5; printf("?: "); }
-    | expr AMPERSAND expr     { $$ = $1 & $3; printf("& "); }
-    | expr PIPE expr     { $$ = $1 | $3; printf("| "); }
-    | expr GREATERTHAN expr     { $$ = $1 > $3; printf("> "); }
-    | expr LESSTHAN expr     { $$ = $1 < $3; printf("< "); }
-    | expr PLUS expr     { $$ = $1 + $3; printf("+ "); }
-    | expr MINUS expr     { $$ = $1 - $3; printf("- "); }
-    | expr STAR expr     { $$ = $1 * $3; printf("* "); }
-    | expr SLASH expr     { $$ = $1 / $3; printf("/ "); }
-    | expr DIV expr     { $$ = $1 / $3; printf("DIV "); }
-    | expr MOD expr     { $$ = $1 % $3; printf("MOD "); }
-    | expr PERCENT expr     { $$ = $1 % $3; printf("%% "); }
-    | expr CARET expr     { $$ = pow($1, $3); printf("^ "); }
-    | NUM               { printf("%d ", $1); }
+    | expr AMPERSAND expr                   { $$ = $1 & $3; printf("& "); }
+    | expr PIPE expr                        { $$ = $1 | $3; printf("| "); }
+    | expr GREATERTHAN expr                 { $$ = $1 > $3; printf("> "); }
+    | expr LESSTHAN expr                    { $$ = $1 < $3; printf("< "); }
+    | expr PLUS expr                        { $$ = $1 + $3; printf("+ "); }
+    | expr MINUS expr                       { $$ = $1 - $3; printf("- "); }
+    | expr STAR expr                        { $$ = $1 * $3; printf("* "); }
+    | expr SLASH expr                       { $$ = $1 / $3; printf("/ "); }
+    | expr DIV expr                         { $$ = $1 / $3; printf("DIV "); }
+    | expr MOD expr                         { $$ = $1 % $3; printf("MOD "); }
+    | expr PERCENT expr                     { $$ = $1 % $3; printf("%% "); }
+    | expr CARET expr                       { $$ = pow($1, $3); printf("^ "); }
+    | NUM                                   { printf("%d ", $1); }
     | ID                { if (symtable[$1].initialized || symtable[$1].theVariableThatIsGoingToBeAssignedAValue) 
                             { 
                               $$ = symtable[$1].value; 
