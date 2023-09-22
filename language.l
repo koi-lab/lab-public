@@ -18,6 +18,10 @@ id	{letter}({letter}|{digit})*
 {ws}	{ /* no action and no return */ }
 "mod"      { return MOD; }
 "div"      { return DIV; }
+"while"    { return WHILE; }
+"if"       { return IF; }
+"{"        { return LCURLYBRACKET; }
+"}"        { return RCURLYBRACKET; }
 {id}	{ yylval = install_id(yytext, yyleng);
           return ID; }
 "="       { return EQUAL; }
