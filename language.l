@@ -20,6 +20,7 @@ id	{letter}({letter}|{digit})*
 "div"      { return DIV; }
 "while"    { return WHILE; }
 "if"       { return IF; }
+"else"       { return ELSE; }
 "{"        { return LCURLYBRACKET; }
 "}"        { return RCURLYBRACKET; }
 {id}	{ yylval = install_id(yytext, yyleng);
