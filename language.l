@@ -17,11 +17,13 @@ id	{letter}({letter}|{digit})*
 
 {ws}	{ /* no action and no return */ }
 "print"    { return PRINT; }
+"read"     { return READ; }
 "mod"      { return MOD; }
 "div"      { return DIV; }
 "while"    { return WHILE; }
 "if"       { return IF; }
-"else"       { return ELSE; }
+"else"     { return ELSE; }
+"end"      { return END; }
 "{"        { return LCURLYBRACKET; }
 "}"        { return RCURLYBRACKET; }
 {id}	{ yylval = install_id(yytext, yyleng);

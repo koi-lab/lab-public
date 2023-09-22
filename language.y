@@ -38,7 +38,7 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 %}
 
 %token <int_value> NUM ID
-%token <p> LINK IF WHILE DONE DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON LCURLYBRACKET RCURLYBRACKET PRINT ELSE
+%token <p> LINK IF WHILE DONE DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON LCURLYBRACKET RCURLYBRACKET PRINT ELSE READ END
 %left EQUAL
 %left QUESTIONMARK COLON
 %left PIPE AMPERSAND
@@ -58,12 +58,9 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 
 %%
 
-start: list DONE
+start: link { printf("\n"); print_the_tree($1, 0); printf("\n"); } END start DONE
+       | /* empty */
        ;
-
-list:  expr SEMICOLON { print_the_tree($1, 0); printf("\n"); } list
-        | /* empty */
-        ;
 
 link:  expr SEMICOLON link { $$ = mknode(LINK, $1, $3, NULL); }
         | /* empty */ { $$ = NULL; }
@@ -92,6 +89,7 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     | NUM                                   { $$ = mkleaf(NUM, $1); }
     | ID                                    { $$ = mkleaf(ID, $1); }
     | PRINT LPAREN ID RPAREN                { $$ = mknode(PRINT, mkleaf(ID, $3), NULL, NULL); }
+    | READ LPAREN ID RPAREN                { $$ = mknode(READ, mkleaf(ID, $3), NULL, NULL); }
     ;
 %%
 
@@ -139,6 +137,7 @@ void print_the_tree(struct Node* p, int level) {
         case ELSE: printf("else\n"); break;
         case TERNARY: printf("?:\n"); break;
         case PRINT: printf("print\n"); break;
+        case READ: printf("read\n"); break;
         default: printf("%d\n", p->leaf_value); break;
     }
 
