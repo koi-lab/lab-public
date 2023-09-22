@@ -36,8 +36,8 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 }
 %}
 
-%token <int_value> NUM
-%token <p> DONE ID DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON
+%token <int_value> NUM ID
+%token <p> DONE DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON
 %left EQUAL
 %left QUESTIONMARK COLON
 %left PIPE AMPERSAND
@@ -46,7 +46,7 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 %left STAR SLASH DIV MOD PERCENT
 %left CARET
 
-%union {
+%union value {
   struct Node* p;
   int int_value;
 }
@@ -78,7 +78,7 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     | expr CARET expr                       { $$ = mknode(CARET, $1, $3, NULL); }
     | expr EQUAL expr                       { $$ = mknode(EQUAL, $1, $3, NULL); }
     | NUM                                   { $$ = mkleaf(NUM, $1); }
-    | ID                { if (symtable[yylval].initialized || symtable[$1].theVariableThatIsGoingToBeAssignedAValue) 
+    | ID                { if (symtable[$1].initialized || symtable[$1].theVariableThatIsGoingToBeAssignedAValue) 
                             { 
                               $$ = mkleaf(ID, $1);
                             }
