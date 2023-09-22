@@ -36,7 +36,8 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 }
 %}
 
-%token DONE ID NUM DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON
+%token <int_value> NUM
+%token <p> DONE ID DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON
 %left EQUAL
 %left QUESTIONMARK COLON
 %left PIPE AMPERSAND
@@ -47,6 +48,7 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 
 %union {
   struct Node* p;
+  int int_value;
 }
 
 %type <p> expr;
@@ -75,10 +77,10 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     | expr PERCENT expr                     { $$ = mknode(PERCENT, $1, $3, NULL); }
     | expr CARET expr                       { $$ = mknode(CARET, $1, $3, NULL); }
     | expr EQUAL expr                       { $$ = mknode(EQUAL, $1, $3, NULL); }
-    | NUM                                   { $$ = mkleaf(NUM, *yylval.leaf_value); }
-    | ID                { if (symtable[yylval].initialized || symtable[yylval].theVariableThatIsGoingToBeAssignedAValue) 
+    | NUM                                   { $$ = mkleaf(NUM, $1); }
+    | ID                { if (symtable[yylval].initialized || symtable[$1].theVariableThatIsGoingToBeAssignedAValue) 
                             { 
-                              $$ = mkleaf(ID, yylval);
+                              $$ = mkleaf(ID, $1);
                             }
                           else 
                             {
@@ -93,7 +95,7 @@ void print_the_tree(struct Node* p, int level) {
     ;
   else if (p->type == ID) {
     printf("%*s", 2*level, "");
-    printf("%s\n", symtable[p->leaf_value].lexptr);
+    printf("%s\n", symtable[p->leaf_value].lexeme);
   }
   else if (p->type == NUM) {
     printf("%*s", 2*level, "");
