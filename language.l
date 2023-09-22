@@ -16,6 +16,7 @@ id	{letter}({letter}|{digit})*
 %%
 
 {ws}	{ /* no action and no return */ }
+"print"    { return PRINT; }
 "mod"      { return MOD; }
 "div"      { return DIV; }
 "while"    { return WHILE; }
