@@ -53,25 +53,25 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 }
 
 %type <p> expr;
-%type <p> link;
+%type <p> statements;
 %type <p> else;
 
 %%
 
-start: link { printf("\n"); print_the_tree($1, 0); printf("\n"); } END start DONE
+start: statements { printf("\n"); print_the_tree($1, 0); printf("\n"); } END start DONE
        | /* empty */
        ;
 
-link:  expr SEMICOLON link { $$ = mknode(LINK, $1, $3, NULL); }
+statements:  expr SEMICOLON statements { $$ = mknode(LINK, $1, $3, NULL); }
         | /* empty */ { $$ = NULL; }
         ;
 
-else:  ELSE LCURLYBRACKET link RCURLYBRACKET { $$ = mknode(ELSE, $3, NULL, NULL); }
+else:  ELSE LCURLYBRACKET statements RCURLYBRACKET { $$ = mknode(ELSE, $3, NULL, NULL); }
         | /* empty */ { $$ = NULL; }
 
 expr: LPAREN expr RPAREN                    { $$ = $2; }
-    | WHILE LPAREN expr RPAREN LCURLYBRACKET link RCURLYBRACKET { $$ = mknode(WHILE, $3, $6, NULL); }
-    | IF LPAREN expr RPAREN LCURLYBRACKET link RCURLYBRACKET else { $$ = mknode(IF, $3, $6, $8); }
+    | WHILE LPAREN expr RPAREN LCURLYBRACKET statements RCURLYBRACKET { $$ = mknode(WHILE, $3, $6, NULL); }
+    | IF LPAREN expr RPAREN LCURLYBRACKET statements RCURLYBRACKET else { $$ = mknode(IF, $3, $6, $8); }
     | expr QUESTIONMARK expr COLON expr     { $$ = mknode(TERNARY, $1, $3, $5); }
     | expr AMPERSAND expr                   { $$ = mknode(AMPERSAND, $1, $3, NULL); }
     | expr PIPE expr                        { $$ = mknode(PIPE, $1, $3, NULL); }
@@ -131,7 +131,7 @@ void print_the_tree(struct Node* p, int level) {
         case RPAREN: printf(")\n"); break;
         case NEWLINE: printf("\\n\n"); break;
         case SEMICOLON: printf(";\n"); break;
-        case LINK: printf("link\n"); break;
+        case LINK: printf("statements\n"); break;
         case WHILE: printf("while\n"); break;
         case IF: printf("if\n"); break;
         case ELSE: printf("else\n"); break;
