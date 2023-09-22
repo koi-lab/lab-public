@@ -11,6 +11,7 @@
 
 #define NONE   -1
 #define EOS    '\0'
+#define TERNARY 333
 
 extern int token_value;   /*  value of token attribute */  
 extern int lineno;
@@ -25,27 +26,9 @@ struct symentry {  /*  form of symbol table entry  */
 
 extern struct symentry symtable[];  /* symbol table  */
 
-extern void init();  /*  loads keywords into symtable  */
 extern void error(char* message);  /*  generates all error messages  */
-extern int lexan();  /*  lexical analyzer  */
 extern void parse();  /*  parses and translates expression list  */
 extern int insert(char *s, int token_type);    /*  returns position of entry for s */
 extern int lookup(char *s);         /* returns position of entry for s, or -1 if not found */
-extern void emit (int token_type, int token_value);  /*  generates output  */
 
 
-
-#define MAX_STACK_SIZE 100
-
-typedef struct Stack {
-    int data[MAX_STACK_SIZE];
-    int top;
-} Stack;
-
-extern Stack *stack;
-
-extern void initialize(Stack* stack);
-extern void push(Stack* stack, int value);
-extern int pop(Stack* stack);
-extern int peek(Stack* stack);
-extern void printStack(Stack* stack);
