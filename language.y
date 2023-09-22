@@ -60,12 +60,12 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 start: list DONE
        ;
 
-list:  expr SEMICOLON { print_the_tree($1, 0); } list
+list:  expr SEMICOLON { print_the_tree($1, 0); printf("\n"); } list
         | /* empty */
         ;
 
 link:  expr SEMICOLON link { $$ = mknode(LINK, $1, $3, NULL); }
-        | expr SEMICOLON /* empty */ { $$ = mknode(LINK, $1, NULL, NULL); }
+        | /* empty */ { $$ = NULL; }
         ;
 
 expr: LPAREN expr RPAREN                    { $$ = $2; }
