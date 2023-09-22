@@ -53,7 +53,7 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 }
 
 %type <p> expr;
-%type <p> list;
+%type <p> link;
 
 %%
 
@@ -69,7 +69,7 @@ link:  expr SEMICOLON link { $$ = mknode(LINK, $1, $3, NULL); }
         ;
 
 expr: LPAREN expr RPAREN                    { $$ = $2; }
-    | WHILE LPAREN expr RPAREN LCURLYBRACKET link RCURLYBRACKET { $$ = mknode(TERNARY, $3, $6, NULL); }
+    | WHILE LPAREN expr RPAREN LCURLYBRACKET link RCURLYBRACKET { $$ = mknode(WHILE, $3, $6, NULL); }
     | expr QUESTIONMARK expr COLON expr     { $$ = mknode(TERNARY, $1, $3, $5); }
     | expr AMPERSAND expr                   { $$ = mknode(AMPERSAND, $1, $3, NULL); }
     | expr PIPE expr                        { $$ = mknode(PIPE, $1, $3, NULL); }
@@ -135,6 +135,8 @@ void print_the_tree(struct Node* p, int level) {
         case NEWLINE: printf("\\n\n"); break;
         case SEMICOLON: printf(";\n"); break;
         case LINK: printf("link\n"); break;
+        case WHILE: printf("while\n"); break;
+        case TERNARY: printf("?:\n"); break;
         default: printf("%d\n", p->leaf_value); break;
     }
 
