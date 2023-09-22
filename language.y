@@ -6,6 +6,10 @@
   extern int token_value;
   extern void yyerror(char*);
   int yylex(void);
+  
+  void print_the_tree(struct Node* p, int level);
+
+
 
 #define MAX_ARGS 3
 
@@ -15,15 +19,15 @@ typedef struct Node {
   struct Node* args[MAX_ARGS];
 } Node;
 
-Node* mkleaf(int type, int value) {
-  Node* p = malloc(sizeof(Node));
+struct Node* mkleaf(int type, int value) {
+  struct Node* p = malloc(sizeof(struct Node));
   p->type = type;
   p->leaf_value = value;
   return p;
 }
 
-Node* mknode(int type, Node* a0, Node* a1, Node* a2) {
-  Node* p = malloc(sizeof(Node));
+struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2) {
+  struct Node* p = malloc(sizeof(struct Node));
   p->type = type;
   p->args[0] = a0;
   p->args[1] = a1;
@@ -42,7 +46,7 @@ Node* mknode(int type, Node* a0, Node* a1, Node* a2) {
 %left CARET
 
 %union {
-  Node* p;
+  struct Node* p;
 }
 
 %type <p> expr;
@@ -71,7 +75,7 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     | expr PERCENT expr                     { $$ = mknode(PERCENT, $1, $3, NULL); }
     | expr CARET expr                       { $$ = mknode(CARET, $1, $3, NULL); }
     | expr EQUAL expr                       { $$ = mknode(EQUAL, $1, $3, NULL); }
-    | NUM                                   { $$ = mkleaf(NUM, yylval); }
+    | NUM                                   { $$ = mkleaf(NUM, *yylval.leaf_value); }
     | ID                { if (symtable[yylval].initialized || symtable[yylval].theVariableThatIsGoingToBeAssignedAValue) 
                             { 
                               $$ = mkleaf(ID, yylval);
@@ -84,7 +88,7 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     ;
 %%
 
-void print_the_tree(Node* p, int level) {
+void print_the_tree(struct Node* p, int level) {
   if (p == 0)
     ;
   else if (p->type == ID) {
