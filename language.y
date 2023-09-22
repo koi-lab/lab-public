@@ -38,7 +38,7 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 %}
 
 %token <int_value> NUM ID
-%token <p> LINK IF WHILE DONE DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON LCURLYBRACKET RCURLYBRACKET PRINT
+%token <p> LINK IF WHILE DONE DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON LCURLYBRACKET RCURLYBRACKET PRINT ELSE
 %left EQUAL
 %left QUESTIONMARK COLON
 %left PIPE AMPERSAND
@@ -74,7 +74,7 @@ else:  ELSE LCURLYBRACKET link RCURLYBRACKET { $$ = mknode(ELSE, $3, NULL, NULL)
 
 expr: LPAREN expr RPAREN                    { $$ = $2; }
     | WHILE LPAREN expr RPAREN LCURLYBRACKET link RCURLYBRACKET { $$ = mknode(WHILE, $3, $6, NULL); }
-    | IF LPAREN expr RPAREN LCURLYBRACKET link RCURLYBRACKET else { $$ = mknode(WHILE, $3, $6, $8); }
+    | IF LPAREN expr RPAREN LCURLYBRACKET link RCURLYBRACKET else { $$ = mknode(IF, $3, $6, $8); }
     | expr QUESTIONMARK expr COLON expr     { $$ = mknode(TERNARY, $1, $3, $5); }
     | expr AMPERSAND expr                   { $$ = mknode(AMPERSAND, $1, $3, NULL); }
     | expr PIPE expr                        { $$ = mknode(PIPE, $1, $3, NULL); }
