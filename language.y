@@ -85,15 +85,7 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     | expr CARET expr                       { $$ = mknode(CARET, $1, $3, NULL); }
     | expr EQUAL expr                       { $$ = mknode(EQUAL, $1, $3, NULL); }
     | NUM                                   { $$ = mkleaf(NUM, $1); }
-    | ID                { if (symtable[$1].initialized || symtable[$1].theVariableThatIsGoingToBeAssignedAValue) 
-                            { 
-                              $$ = mkleaf(ID, $1);
-                            }
-                          else 
-                            {
-                              yyerror("Used an uninitialized variable, why did you do that?");
-                            }
-                        }
+    | ID                                    { $$ = mkleaf(ID, $1); }
     ;
 %%
 
@@ -114,6 +106,7 @@ void print_the_tree(struct Node* p, int level) {
 
     // Print the node based on its type
     switch (p->type) {
+        case ID: printf("%s\n", symtable[p->leaf_value].lexeme); break;
         case DONE: printf("DONE\n"); break;
         case DIV: printf("DIV\n"); break;
         case MOD: printf("MOD\n"); break;
