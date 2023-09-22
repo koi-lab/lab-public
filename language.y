@@ -7,17 +7,18 @@
   extern void yyerror(char*);
   int yylex(void);
   
+  void print_spaces(int count);
   void print_the_tree(struct Node* p, int level);
 
 
 
 #define MAX_ARGS 3
 
-typedef struct Node {
+struct Node {
   int type;
   int leaf_value;
   struct Node* args[MAX_ARGS];
-} Node;
+};
 
 struct Node* mkleaf(int type, int value) {
   struct Node* p = malloc(sizeof(struct Node));
@@ -90,30 +91,50 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     ;
 %%
 
+// Function to print spaces for indentation
+void print_spaces(int count) {
+    for (int i = 0; i < count; i++) {
+        printf(" ");
+    }
+}
+
 void print_the_tree(struct Node* p, int level) {
-  if (p == 0)
-    ;
-  else if (p->type == ID) {
-    printf("%*s", 2*level, "");
-    printf("%s\n", symtable[p->leaf_value].lexeme);
-  }
-  else if (p->type == NUM) {
-    printf("%*s", 2*level, "");
-    printf("%d\n", p->leaf_value);
-  }
-  else if (p->type == PLUS) {
-    printf("%*s", 2*level, "");
-    printf("+\n");
-    print_the_tree(p->args[0], level + 1);
-    print_the_tree(p->args[1], level + 1);
-  }
-  else if (p->type == SEMICOLON) {
-    printf("%*s", 2*level, "");
-    print_the_tree(p->args[0], level + 1);
-    printf("%*s", 2*level, "");
-    printf(";\n");
-    print_the_tree(p->args[1], level);
-  }
+    if (p == NULL) {
+        return;
+    }
+
+    // Print spaces for indentation
+    print_spaces(level * 2);
+
+    // Print the node based on its type
+    switch (p->type) {
+        case DONE: printf("DONE\n"); break;
+        case DIV: printf("DIV\n"); break;
+        case MOD: printf("MOD\n"); break;
+        case EQUAL: printf("=\n"); break;
+        case QUESTIONMARK: printf("?\n"); break;
+        case COLON: printf(":\n"); break;
+        case PIPE: printf("|\n"); break;
+        case AMPERSAND: printf("&\n"); break;
+        case GREATERTHAN: printf(">\n"); break;
+        case LESSTHAN: printf("<\n"); break;
+        case PLUS: printf("+\n"); break;
+        case MINUS: printf("-\n"); break;
+        case STAR: printf("*\n"); break;
+        case SLASH: printf("/\n"); break;
+        case PERCENT: printf("%%\n"); break;
+        case CARET: printf("^\n"); break;
+        case LPAREN: printf("(\n"); break;
+        case RPAREN: printf(")\n"); break;
+        case NEWLINE: printf("\\n\n"); break;
+        case SEMICOLON: printf(";\n"); break;
+        default: printf("%d\n", p->leaf_value); break;
+    }
+
+    // Recursively print the children nodes
+    for (int i = 0; i < MAX_ARGS; i++) {
+        print_the_tree(p->args[i], level + 1);
+    }
 } 
 
 void yyerror(char *s) {
