@@ -20,7 +20,7 @@ struct symentry {  /*  form of symbol table entry  */
     char *lexeme; 
     int  token_type;    
     int  value;
-    bool  initialized;
+    bool initialized;
     bool theVariableThatIsGoingToBeAssignedAValue;
 };
 
