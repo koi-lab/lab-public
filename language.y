@@ -3,12 +3,16 @@
   #include <stdlib.h>
   #include <math.h>
   #include "global.h"
+
+  #define GARBAGE 0
+
   extern int token_value;
   extern void yyerror(char*);
   int yylex(void);
   
   void print_spaces(int count);
   void print_the_tree(struct Node* p, int level);
+  int execute(struct Node* p);
 
 
 
@@ -38,7 +42,7 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 %}
 
 %token <int_value> NUM ID
-%token <p> LINK IF WHILE DONE DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON LCURLYBRACKET RCURLYBRACKET PRINT ELSE READ END
+%token <p> STATEMENTS IF WHILE DONE DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON LCURLYBRACKET RCURLYBRACKET PRINT ELSE READ END
 %left EQUAL
 %left QUESTIONMARK COLON
 %left PIPE AMPERSAND
@@ -58,11 +62,11 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
 
 %%
 
-start: statements { printf("\n"); print_the_tree($1, 0); printf("\n"); } END start DONE
+start: statements { printf("\n"); print_the_tree($1, 0); printf("\n"); } END { execute($1); printf("\n\n"); } start DONE
        | /* empty */
        ;
 
-statements:  expr SEMICOLON statements { $$ = mknode(LINK, $1, $3, NULL); }
+statements:  expr SEMICOLON statements { $$ = mknode(STATEMENTS, $1, $3, NULL); }
         | /* empty */ { $$ = NULL; }
         ;
 
@@ -89,7 +93,7 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     | NUM                                   { $$ = mkleaf(NUM, $1); }
     | ID                                    { $$ = mkleaf(ID, $1); }
     | PRINT LPAREN ID RPAREN                { $$ = mknode(PRINT, mkleaf(ID, $3), NULL, NULL); }
-    | READ LPAREN ID RPAREN                { $$ = mknode(READ, mkleaf(ID, $3), NULL, NULL); }
+    | READ LPAREN ID RPAREN                 { $$ = mknode(READ, mkleaf(ID, $3), NULL, NULL); }
     ;
 %%
 
@@ -131,7 +135,7 @@ void print_the_tree(struct Node* p, int level) {
         case RPAREN: printf(")\n"); break;
         case NEWLINE: printf("\\n\n"); break;
         case SEMICOLON: printf(";\n"); break;
-        case LINK: printf("statements\n"); break;
+        case STATEMENTS: printf("statements\n"); break;
         case WHILE: printf("while\n"); break;
         case IF: printf("if\n"); break;
         case ELSE: printf("else\n"); break;
@@ -145,7 +149,7 @@ void print_the_tree(struct Node* p, int level) {
     for (int i = 0; i < MAX_ARGS; i++) {
         print_the_tree(p->args[i], level + 1);
     }
-} 
+}
 
 void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);
@@ -154,4 +158,94 @@ void yyerror(char *s) {
 
 void parse() {
   yyparse();
+}
+
+int execute(struct Node* p) {
+    if (p == NULL) {
+      return GARBAGE;
+    }
+
+    switch (p->type) {
+        case ID:
+          if (symtable[p->leaf_value].initialized) {
+            return symtable[p->leaf_value].value;
+          }
+          error("❗️ You use an uninitialized variable.\n");
+
+        case NUM:
+          return p->leaf_value;
+
+        case DIV: 
+          return execute(p->args[0]) / execute(p->args[1]);
+
+        case MOD: 
+          return execute(p->args[0]) % execute(p->args[1]);
+
+        case EQUAL:
+          if (p->args[0]->type != ID) {
+            error("❗️ Invalid assignment.\n");
+          }
+
+          symtable[p->args[0]->leaf_value].value = execute(p->args[1]);
+          return GARBAGE;
+
+        case TERNARY:
+          return execute(p->args[0]) ? execute(p->args[1]) : execute(p->args[2]);
+
+        case PIPE:
+          return execute(p->args[0]) | execute(p->args[1]);
+
+        case AMPERSAND:
+          return execute(p->args[0]) & execute(p->args[1]);
+
+        case GREATERTHAN:
+          return execute(p->args[0]) > execute(p->args[1]);
+
+        case LESSTHAN:
+          return execute(p->args[0]) < execute(p->args[1]);
+
+        case PLUS:
+          return execute(p->args[0]) + execute(p->args[1]);
+
+        case MINUS:
+          return execute(p->args[0]) - execute(p->args[1]);
+
+        case STAR:
+          return execute(p->args[0]) * execute(p->args[1]);
+          
+        case SLASH:
+          return execute(p->args[0]) / execute(p->args[1]);
+          
+        case PERCENT:
+          return execute(p->args[0]) % execute(p->args[1]);
+
+        case CARET:
+          return pow(execute(p->args[0]), execute(p->args[1]));
+
+        case STATEMENTS:
+          execute(p->args[0]);
+          execute(p->args[1]);
+          return GARBAGE;
+
+        case WHILE:
+          while (execute(p->args[0])) {
+            execute(p->args[1]);
+          }
+          return GARBAGE;
+
+        case IF:
+          execute(p->args[0]) ? execute(p->args[1]) : execute(p->args[2]);
+          return GARBAGE;
+
+        case PRINT:
+          printf("%d\n", symtable[p->args[0]->leaf_value].value);
+          break;
+
+        case READ:
+          int temp;
+          printf("Enter an integer: ");
+          scanf(" %d", &temp);
+          symtable[p->args[0]->leaf_value].value = temp;
+          break;
+    }
 }
