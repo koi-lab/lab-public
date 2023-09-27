@@ -297,7 +297,7 @@ int execute(struct Node* p) {
             
             struct Instruction* i = malloc(sizeof(struct Instruction));
             i->operation = getOperation(rvalue);
-            i->argument = symtable[p->leaf_value].value;
+            i->argument = p->leaf_value;
             push_to_array(array, i);
 
             return symtable[p->leaf_value].value;

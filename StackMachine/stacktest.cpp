@@ -15,7 +15,7 @@ int main() {
     sm.append(Instruction(push, 1));
     sm.append(Instruction(assign));
     sm.append(Instruction(lvalue, 1));
-    sm.append(Instruction(rvalue, 1));
+    sm.append(Instruction(rvalue, 0));
     sm.append(Instruction(push, 2));
     sm.append(Instruction(plus));
     sm.append(Instruction(assign));
