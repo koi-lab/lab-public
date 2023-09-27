@@ -70,7 +70,7 @@ statements:  expr SEMICOLON statements { $$ = mknode(STATEMENTS, $1, $3, NULL); 
         | /* empty */ { $$ = NULL; }
         ;
 
-else:  ELSE LCURLYBRACKET statements RCURLYBRACKET { $$ = mknode(ELSE, $3, NULL, NULL); }
+else:  ELSE LCURLYBRACKET statements RCURLYBRACKET { $$ = $3; }
         | /* empty */ { $$ = NULL; }
 
 expr: LPAREN expr RPAREN                    { $$ = $2; }
