@@ -8,7 +8,6 @@
   void print_the_tree(struct Node* p, int level);
   int execute(struct Node* p);
 
-
 #define MAX_ARGS 3
 
 struct Node {
@@ -22,7 +21,7 @@ struct Node* mkleaf(int type, int value) {
   p->type = type;
   p->leaf_value = value;
   return p;
-}
+};
 
 struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2) {
   struct Node* p = malloc(sizeof(struct Node));
@@ -31,9 +30,131 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
   p->args[1] = a1;
   p->args[2] = a2;
   return p;
+};
+
+enum StackOp {
+    push,         // Push a number
+    rvalue,       // Push the contents of a variable
+    lvalue,       // Push a reference to a variable
+    pop,
+    assign,
+    copy,
+    plus, minus, times, divide, modulo,
+    eq, ne, lt, gt, le, ge, // ==, !=, <, >, <=, >=
+    stackop_or, stackop_and, stackop_not, // |, &, !
+    stackop_read, stackop_write,
+    label,        // Realistically, this shouldn't really be an instruction
+    jump,
+    gofalse,
+    gotrue,
+    halt
+};
+
+struct Instruction {
+  enum StackOp op;
+  int argument;
+};
+
+#define MAX_STACK_SIZE 200
+
+struct Stack {
+  struct Instruction data[MAX_STACK_SIZE];
+  int top;
+};
+
+void initialize(struct Stack* stack) {
+    stack->top = -1;
+}
+
+void push_to_stack(struct Stack* stack, struct Instruction instruction) {
+    if (stack->top >= MAX_STACK_SIZE) {
+        printf("Stack overflow\n");
+        return;
+    }
+    stack->data[++stack->top] = instruction;
+}
+
+// Function to return a literal string for a given enum value
+const char* stackOpToString(enum StackOp op) {
+    switch (op) {
+        case push:
+            return "push";
+        case rvalue:
+            return "rvalue";
+        case lvalue:
+            return "lvalue";
+        case pop:
+            return "pop";
+        case assign:
+            return "assign";
+        case copy:
+            return "copy";
+        case plus:
+            return "plus";
+        case minus:
+            return "minus";
+        case times:
+            return "times";
+        case divide:
+            return "divide";
+        case modulo:
+            return "modulo";
+        case eq:
+            return "eq";
+        case ne:
+            return "ne";
+        case lt:
+            return "lt";
+        case gt:
+            return "gt";
+        case le:
+            return "le";
+        case ge:
+            return "ge";
+        case stackop_or:
+            return "stackop_or";
+        case stackop_and:
+            return "stackop_and";
+        case stackop_not:
+            return "stackop_not";
+        case stackop_read:
+            return "stackop_read";
+        case stackop_write:
+            return "stackop_write";
+        case label:
+            return "label";
+        case jump:
+            return "jump";
+        case gofalse:
+            return "gofalse";
+        case gotrue:
+            return "gotrue";
+        case halt:
+            return "halt";
+        default:
+            return "unknown";
+    }
+}
+
+void printStack(struct Stack* stack) {
+    printf("Stack elements: ");
+    for (int i = stack->top; i >= 0; i--) {
+        printf("sm.append(Instruction(%s, %d));\n", stackOpToString(stack->data[stack->top].op), stack->data[stack->top].argument);
+    }
+    printf("\n");
 }
 
 
+
+
+
+
+
+
+
+
+
+struct Stack* stack;
 %}
 
 %token <int_value> NUM ID
