@@ -138,7 +138,6 @@ void print_the_tree(struct Node* p, int level) {
         case STATEMENTS: printf("statements\n"); break;
         case WHILE: printf("while\n"); break;
         case IF: printf("if\n"); break;
-        case ELSE: printf("else\n"); break;
         case TERNARY: printf("?:\n"); break;
         case PRINT: printf("print\n"); break;
         case READ: printf("read\n"); break;
