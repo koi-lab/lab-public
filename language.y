@@ -159,7 +159,7 @@ struct Array* array;
 
 %%
 
-start: statements { } END { array = malloc(sizeof(struct Array)); initialize(array); execute($1); printf("\n\n"); printArray(array); } start DONE
+start: statements { } END { array = malloc(sizeof(struct Array)); initialize(array); execute($1); printArray(array); } start DONE
        | /* empty */
        ;
 

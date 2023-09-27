@@ -1,14 +1,14 @@
-OFILES = stacktest.o StackMachine.o
+OFILES = test.o StackMachine.o
 CPPFLAGS = -g -Wall
 
-stacktest: $(OFILES)
-	g++ $(CPPFLAGS) -o stacktest $(OFILES)
+test: $(OFILES)
+	g++ $(CPPFLAGS) -o test $(OFILES)
 
 StackMachine.o: StackMachine.h
-stacktest.o: StackMachine.h
+test.o: StackMachine.h
 
 clean:
-	$(RM) $(OFILES) stacktest
+	$(RM) $(OFILES) test
 
 archives: clean
 	cd ..; \
