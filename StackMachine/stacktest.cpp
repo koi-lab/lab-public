@@ -12,13 +12,14 @@ int main() {
 
   try {
     sm.append(Instruction(lvalue, 0));
-    sm.append(Instruction(push, 1));
+    sm.append(Instruction(push, 2));
     sm.append(Instruction(assign));
     sm.append(Instruction(lvalue, 1));
     sm.append(Instruction(rvalue, 0));
-    sm.append(Instruction(push, 2));
-    sm.append(Instruction(plus));
+    sm.append(Instruction(push, 3));
+    sm.append(Instruction(times));
     sm.append(Instruction(assign));
+    sm.append(Instruction(halt));
 
     sm.showstate();
     sm.list_program();

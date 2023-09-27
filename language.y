@@ -131,7 +131,7 @@ void printArray(struct Array* array) {
       }
     }
 
-    printf("\n    sm.showstate();\n    sm.list_program();\n    sm.set_trace(1);\n    sm.run();\n    sm.showstate();\n  }\n  catch(Exception& e) {\n    std::cout << \"*** Exception caught: \" << e.message() << std::endl;\n    sm.showstate();\n    sm.list_program();\n}\n\n  return 0;\n}\n");
+    printf("    sm.append(Instruction(halt));\n\n    sm.showstate();\n    sm.list_program();\n    sm.set_trace(1);\n    sm.run();\n    sm.showstate();\n  }\n  catch(Exception& e) {\n    std::cout << \"*** Exception caught: \" << e.message() << std::endl;\n    sm.showstate();\n    sm.list_program();\n}\n\n  return 0;\n}\n");
 }
 
 int label_num = 0;
