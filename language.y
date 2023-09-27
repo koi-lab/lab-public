@@ -58,7 +58,7 @@ struct Instruction {
 #define MAX_STACK_SIZE 200
 
 struct Stack {
-  struct Instruction data[MAX_STACK_SIZE];
+  struct Instruction* data[MAX_STACK_SIZE];
   int top;
 };
 
@@ -66,7 +66,7 @@ void initialize(struct Stack* stack) {
     stack->top = -1;
 }
 
-void push_to_stack(struct Stack* stack, struct Instruction instruction) {
+void push_to_stack(struct Stack* stack, struct Instruction* instruction) {
     if (stack->top >= MAX_STACK_SIZE) {
         printf("Stack overflow\n");
         return;
@@ -137,9 +137,9 @@ const char* stackOpToString(enum StackOp op) {
 }
 
 void printStack(struct Stack* stack) {
-    printf("Stack elements: ");
-    for (int i = stack->top; i >= 0; i--) {
-        printf("sm.append(Instruction(%s, %d));\n", stackOpToString(stack->data[stack->top].op), stack->data[stack->top].argument);
+    printf("Stack elements:\n");
+    for (int i = 0; i < stack->top + 1; ++i) {
+        printf("sm.append(Instruction(%s, %d));\n", stackOpToString(stack->data[i]->op), stack->data[i]->argument);
     }
     printf("\n");
 }
@@ -153,7 +153,7 @@ void printStack(struct Stack* stack) {
 
 
 
-
+int label_num = 0;
 struct Stack* stack;
 %}
 
@@ -178,7 +178,7 @@ struct Stack* stack;
 
 %%
 
-start: statements { printf("\n"); print_the_tree($1, 0); printf("\n"); } END { execute($1); printf("\n\n"); } start DONE
+start: statements { printf("\n"); print_the_tree($1, 0); printf("\n"); } END { stack = malloc(sizeof(struct Stack)); initialize(stack); execute($1); printf("\n\n"); printStack(stack); } start DONE
        | /* empty */
        ;
 
@@ -186,7 +186,7 @@ statements:  expr SEMICOLON statements { $$ = mknode(STATEMENTS, $1, $3, NULL); 
         | /* empty */ { $$ = NULL; }
         ;
 
-else:  ELSE LCURLYBRACKET statements RCURLYBRACKET { $$ = mknode(ELSE, $3, NULL, NULL); }
+else:  ELSE LCURLYBRACKET statements RCURLYBRACKET { $$ = $3; }
         | /* empty */ { $$ = NULL; }
 
 expr: LPAREN expr RPAREN                    { $$ = $2; }
@@ -276,92 +276,257 @@ void parse() {
   yyparse();
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int execute(struct Node* p) {
     if (p == NULL) {
-      return GARBAGE;
+        return GARBAGE;
     }
 
     switch (p->type) {
         case ID:
-          if (symtable[p->leaf_value].initialized) {
-            return symtable[p->leaf_value].value;
-          }
-          error("❗️ You use an uninitialized variable.\n");
+            if (symtable[p->leaf_value].initialized) {
+                struct Instruction* i = malloc(sizeof(struct Instruction));
+                i->op = rvalue;
+                i->argument = symtable[p->leaf_value].value;
+                push_to_stack(stack, i);
+
+                break;
+            }
+            error("❗️ You use an uninitialized variable.\n");
 
         case NUM:
-          return p->leaf_value;
+            struct Instruction* i2 = malloc(sizeof(struct Instruction));
+            i2->op = push;
+            i2->argument = p->leaf_value;
+            push_to_stack(stack, i2);
 
-        case DIV: 
-          return execute(p->args[0]) / execute(p->args[1]);
+            break;
 
-        case MOD: 
-          return execute(p->args[0]) % execute(p->args[1]);
+        case DIV:
+            execute(p->args[0]);
+            execute(p->args[1]);
+
+            struct Instruction* i5 = malloc(sizeof(struct Instruction));
+            i5->op = divide;
+            push_to_stack(stack, i5);
+
+            break;
+
+        case MOD:
+            execute(p->args[0]);
+            execute(p->args[1]);
+
+            struct Instruction* i6 = malloc(sizeof(struct Instruction));
+            i6->op = modulo;
+            push_to_stack(stack, i6);
+
+            break;
 
         case EQUAL:
-          if (p->args[0]->type != ID) {
-            error("❗️ Invalid assignment.\n");
-          }
+            printf("🎉");
 
-          symtable[p->args[0]->leaf_value].value = execute(p->args[1]);
-          return GARBAGE;
+            struct Instruction* i7 = malloc(sizeof(struct Instruction));
+            i7->op = lvalue;
+            i7->argument = p->args[0]->leaf_value;
+            push_to_stack(stack, i7);
 
-        case TERNARY:
-          return execute(p->args[0]) ? execute(p->args[1]) : execute(p->args[2]);
+            execute(p->args[1]);
 
-        case PIPE:
-          return execute(p->args[0]) | execute(p->args[1]);
+            struct Instruction* i8 = malloc(sizeof(struct Instruction));
+            i8->op = assign;
+            push_to_stack(stack, i8);
 
-        case AMPERSAND:
-          return execute(p->args[0]) & execute(p->args[1]);
+
+            break;
+
+            // case PIPE:
+            //     return execute(p->args[0]) | execute(p->args[1]);
+
+            // case AMPERSAND:
+            //     return execute(p->args[0]) & execute(p->args[1]);
 
         case GREATERTHAN:
-          return execute(p->args[0]) > execute(p->args[1]);
+            execute(p->args[0]);
+            execute(p->args[1]);
+
+            struct Instruction* i9 = malloc(sizeof(struct Instruction));
+            i9->op = gt;
+            push_to_stack(stack, i9);
+
+            break;
 
         case LESSTHAN:
-          return execute(p->args[0]) < execute(p->args[1]);
+            execute(p->args[0]);
+            execute(p->args[1]);
+
+            struct Instruction* i10 = malloc(sizeof(struct Instruction));
+            i10->op = lt;
+            push_to_stack(stack, i10);
+
+            break;
 
         case PLUS:
-          return execute(p->args[0]) + execute(p->args[1]);
+            execute(p->args[0]);
+            execute(p->args[1]);
+
+            struct Instruction* i3 = malloc(sizeof(struct Instruction));
+            i3->op = plus;
+            push_to_stack(stack, i3);
+
+            break;
 
         case MINUS:
-          return execute(p->args[0]) - execute(p->args[1]);
+            execute(p->args[0]);
+            execute(p->args[1]);
+
+            struct Instruction* i11 = malloc(sizeof(struct Instruction));
+            i11->op = minus;
+            push_to_stack(stack, i11);
+
+            break;
 
         case STAR:
-          return execute(p->args[0]) * execute(p->args[1]);
-          
-        case SLASH:
-          return execute(p->args[0]) / execute(p->args[1]);
-          
-        case PERCENT:
-          return execute(p->args[0]) % execute(p->args[1]);
+            execute(p->args[0]);
+            execute(p->args[1]);
 
-        case CARET:
-          return pow(execute(p->args[0]), execute(p->args[1]));
+            struct Instruction* i4 = malloc(sizeof(struct Instruction));
+            i4->op = times;
+            push_to_stack(stack, i4);
+
+            break;
+
+        case SLASH:
+            execute(p->args[0]);
+            execute(p->args[1]);
+
+            struct Instruction* i12 = malloc(sizeof(struct Instruction));
+            i12->op = divide;
+            push_to_stack(stack, i12);
+
+            break;
+
+        case PERCENT:
+            execute(p->args[0]);
+            execute(p->args[1]);
+
+            struct Instruction* i13 = malloc(sizeof(struct Instruction));
+            i13->op = modulo;
+            push_to_stack(stack, i13);
+
+            break;
+
+            // case CARET:
+            //     return pow(execute(p->args[0]), execute(p->args[1]));
 
         case STATEMENTS:
-          execute(p->args[0]);
-          execute(p->args[1]);
-          return GARBAGE;
-
-        case WHILE:
-          while (execute(p->args[0])) {
+            execute(p->args[0]);
             execute(p->args[1]);
-          }
-          return GARBAGE;
+
+            break;
 
         case IF:
-          execute(p->args[0]) ? execute(p->args[1]) : execute(p->args[2]);
-          return GARBAGE;
+            execute(p->args[0]);
 
-        case PRINT:
-          printf("%d\n", symtable[p->args[0]->leaf_value].value);
-          break;
+            struct Instruction* i20 = malloc(sizeof(struct Instruction));
+            i20->op = gofalse;
+            i20->argument = label_num++;
+            push_to_stack(stack, i20);
 
-        case READ:
-          int temp;
-          printf("Enter an integer: ");
-          scanf(" %d", &temp);
-          symtable[p->args[0]->leaf_value].value = temp;
-          break;
+            execute(p->args[1]);
+
+            struct Instruction* i21 = malloc(sizeof(struct Instruction));
+            i21->op = jump;
+            i21->argument = label_num++;
+            push_to_stack(stack, i21);
+
+            struct Instruction* i22 = malloc(sizeof(struct Instruction));
+            i22->op = label;
+            i22->argument = i20->argument;
+            push_to_stack(stack, i22);
+
+            execute(p->args[2]);
+
+            struct Instruction* i23 = malloc(sizeof(struct Instruction));
+            i23->op = label;
+            i23->argument = i21->argument;
+            push_to_stack(stack, i23);
+
+            break;
+
+        // case TERNARY:
+        //     execute(p->args[0]);
+
+        //     struct Instruction* i20 = malloc(sizeof(struct Instruction));
+        //     i20->op = gofalse;
+        //     i20->argument = label_num++;
+        //     push_to_stack(stack, i20);
+
+        //     execute(p->args[1]);
+
+        //     struct Instruction* i21 = malloc(sizeof(struct Instruction));
+        //     i21->op = jump;
+        //     i21->argument = label_num++;
+        //     push_to_stack(stack, i21);
+
+        //     struct Instruction* i22 = malloc(sizeof(struct Instruction));
+        //     i22->op = label;
+        //     i22->argument = i20->argument;
+        //     push_to_stack(stack, i22);
+
+        //     execute(p->args[2]);
+
+        //     struct Instruction* i23 = malloc(sizeof(struct Instruction));
+        //     i23->op = label;
+        //     i23->argument = i21->argument;
+        //     push_to_stack(stack, i23);
+
+        //     break;
+
+        case WHILE:
+            while (execute(p->args[0])) {
+                execute(p->args[1]);
+            }
+            return GARBAGE;
+
+            // case PRINT:
+            //     printf("%d\n", symtable[p->args[0]->leaf_value].value);
+            //     break;
+
+            // case READ:
+            //     int temp;
+            //     printf("Enter an integer: ");
+            //     scanf(" %d", &temp);
+            //     symtable[p->args[0]->leaf_value].value = temp;
+            //     break;
     }
 }
