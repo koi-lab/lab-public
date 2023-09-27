@@ -1,19 +1,12 @@
 %{
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <math.h>
   #include "global.h"
 
-  #define GARBAGE 0
-
-  extern int token_value;
   extern void yyerror(char*);
   int yylex(void);
   
   void print_spaces(int count);
   void print_the_tree(struct Node* p, int level);
   int execute(struct Node* p);
-
 
 
 #define MAX_ARGS 3
@@ -39,6 +32,8 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
   p->args[2] = a2;
   return p;
 }
+
+
 %}
 
 %token <int_value> NUM ID
