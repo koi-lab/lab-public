@@ -14,4 +14,4 @@ struct Node* makeLeaf(int type, int value);
 
 struct Node* makeNode(int type, struct Node* a0, struct Node* a1, struct Node* a2);
 void printTree(struct Node* p, int level);
-int execute(struct Node* p);
+int execute(struct Node** p);
