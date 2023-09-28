@@ -29,6 +29,10 @@ struct Node* makeNode(int type, struct Node* a0, struct Node* a1,
     return p;
 };
 
+void printNode(struct Node* node) {
+    printf("Current pointer is pointing to the node with type %d.\n", node->type);
+}
+
 void printSpaces(int count) {
     for (int i = 0; i < count; i++) {
         printf(" ");
