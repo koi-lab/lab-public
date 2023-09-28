@@ -1,6 +1,7 @@
 #include "instruction.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "error.h"
 
@@ -39,4 +40,5 @@ const struct Operation getOperation(enum OperationType type) {
         }
     }
     error("Operation not found.");
+    exit(1);
 }

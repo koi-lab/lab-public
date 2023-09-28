@@ -12,14 +12,14 @@
 int label_num = 0;
 struct Array* array;
 
-struct Node* mkleaf(int type, int value) {
+struct Node* makeLeaf(int type, int value) {
     struct Node* p = malloc(sizeof(struct Node));
     p->type = type;
     p->leaf_value = value;
     return p;
 };
 
-struct Node* mknode(int type, struct Node* a0, struct Node* a1,
+struct Node* makeNode(int type, struct Node* a0, struct Node* a1,
                     struct Node* a2) {
     struct Node* p = malloc(sizeof(struct Node));
     p->type = type;
@@ -35,7 +35,7 @@ void print_spaces(int count) {
     }
 }
 
-void print_the_tree(struct Node* p, int level) {
+void printTree(struct Node* p, int level) {
     if (p == NULL) {
         return;
     }
@@ -130,7 +130,7 @@ void print_the_tree(struct Node* p, int level) {
     }
 
     for (int i = 0; i < MAX_ARGS; i++) {
-        print_the_tree(p->args[i], level + 1);
+        printTree(p->args[i], level + 1);
     }
 }
 
@@ -145,7 +145,7 @@ int execute(struct Node* p) {
                 struct Instruction* i = malloc(sizeof(struct Instruction));
                 i->operation = getOperation(rvalue);
                 i->argument = p->leaf_value;
-                push_to_array(array, i);
+                addElement(array, i);
 
                 return symtable[p->leaf_value].value;
             }
@@ -155,7 +155,7 @@ int execute(struct Node* p) {
             struct Instruction* i2 = malloc(sizeof(struct Instruction));
             i2->operation = getOperation(push);
             i2->argument = p->leaf_value;
-            push_to_array(array, i2);
+            addElement(array, i2);
 
             return p->leaf_value;
 
@@ -164,7 +164,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i5 = malloc(sizeof(struct Instruction));
             i5->operation = getOperation(divide);
-            push_to_array(array, i5);
+            addElement(array, i5);
 
             return result1;
 
@@ -173,7 +173,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i6 = malloc(sizeof(struct Instruction));
             i6->operation = getOperation(modulo);
-            push_to_array(array, i6);
+            addElement(array, i6);
 
             return result2;
 
@@ -181,14 +181,14 @@ int execute(struct Node* p) {
             struct Instruction* i7 = malloc(sizeof(struct Instruction));
             i7->operation = getOperation(lvalue);
             i7->argument = p->args[0]->leaf_value;
-            push_to_array(array, i7);
+            addElement(array, i7);
 
             symtable[p->args[0]->leaf_value].value = execute(p->args[1]);
             symtable[p->args[0]->leaf_value].initialized = true;
 
             struct Instruction* i8 = malloc(sizeof(struct Instruction));
             i8->operation = getOperation(assign);
-            push_to_array(array, i8);
+            addElement(array, i8);
 
             return GARBAGE;
 
@@ -197,7 +197,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i9 = malloc(sizeof(struct Instruction));
             i9->operation = getOperation(gt);
-            push_to_array(array, i9);
+            addElement(array, i9);
 
             return result3;
 
@@ -206,7 +206,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i10 = malloc(sizeof(struct Instruction));
             i10->operation = getOperation(lt);
-            push_to_array(array, i10);
+            addElement(array, i10);
 
             return result4;
 
@@ -215,7 +215,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i3 = malloc(sizeof(struct Instruction));
             i3->operation = getOperation(plus);
-            push_to_array(array, i3);
+            addElement(array, i3);
 
             return result5;
 
@@ -224,7 +224,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i11 = malloc(sizeof(struct Instruction));
             i11->operation = getOperation(minus);
-            push_to_array(array, i11);
+            addElement(array, i11);
 
             return result6;
 
@@ -233,7 +233,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i4 = malloc(sizeof(struct Instruction));
             i4->operation = getOperation(times);
-            push_to_array(array, i4);
+            addElement(array, i4);
 
             return result7;
 
@@ -242,7 +242,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i12 = malloc(sizeof(struct Instruction));
             i12->operation = getOperation(divide);
-            push_to_array(array, i12);
+            addElement(array, i12);
 
             return result8;
 
@@ -251,7 +251,7 @@ int execute(struct Node* p) {
 
             struct Instruction* i13 = malloc(sizeof(struct Instruction));
             i13->operation = getOperation(modulo);
-            push_to_array(array, i13);
+            addElement(array, i13);
 
             return result9;
 
@@ -267,26 +267,26 @@ int execute(struct Node* p) {
             struct Instruction* i20 = malloc(sizeof(struct Instruction));
             i20->operation = getOperation(gofalse);
             i20->argument = label_num++;
-            push_to_array(array, i20);
+            addElement(array, i20);
 
             execute(p->args[1]);
 
             struct Instruction* i21 = malloc(sizeof(struct Instruction));
             i21->operation = getOperation(jump);
             i21->argument = label_num++;
-            push_to_array(array, i21);
+            addElement(array, i21);
 
             struct Instruction* i22 = malloc(sizeof(struct Instruction));
             i22->operation = getOperation(label);
             i22->argument = i20->argument;
-            push_to_array(array, i22);
+            addElement(array, i22);
 
             execute(p->args[2]);
 
             struct Instruction* i23 = malloc(sizeof(struct Instruction));
             i23->operation = getOperation(label);
             i23->argument = i21->argument;
-            push_to_array(array, i23);
+            addElement(array, i23);
 
             return GARBAGE;
 
@@ -296,26 +296,26 @@ int execute(struct Node* p) {
             struct Instruction* i24 = malloc(sizeof(struct Instruction));
             i24->operation = getOperation(gofalse);
             i24->argument = label_num++;
-            push_to_array(array, i24);
+            addElement(array, i24);
 
             execute(p->args[1]);
 
             struct Instruction* i25 = malloc(sizeof(struct Instruction));
             i25->operation = getOperation(jump);
             i25->argument = label_num++;
-            push_to_array(array, i25);
+            addElement(array, i25);
 
             struct Instruction* i26 = malloc(sizeof(struct Instruction));
             i26->operation = getOperation(label);
             i26->argument = i24->argument;
-            push_to_array(array, i26);
+            addElement(array, i26);
 
             execute(p->args[2]);
 
             struct Instruction* i27 = malloc(sizeof(struct Instruction));
             i27->operation = getOperation(label);
             i27->argument = i25->argument;
-            push_to_array(array, i27);
+            addElement(array, i27);
 
             break;
 
@@ -323,26 +323,26 @@ int execute(struct Node* p) {
             struct Instruction* i28 = malloc(sizeof(struct Instruction));
             i28->operation = getOperation(label);
             i28->argument = label_num++;
-            push_to_array(array, i28);
+            addElement(array, i28);
 
             execute(p->args[0]);
 
             struct Instruction* i29 = malloc(sizeof(struct Instruction));
             i29->operation = getOperation(gofalse);
             i29->argument = label_num++;
-            push_to_array(array, i29);
+            addElement(array, i29);
 
             execute(p->args[1]);
 
             struct Instruction* i30 = malloc(sizeof(struct Instruction));
             i30->operation = getOperation(jump);
             i30->argument = i28->argument;
-            push_to_array(array, i30);
+            addElement(array, i30);
 
             struct Instruction* i31 = malloc(sizeof(struct Instruction));
             i31->operation = getOperation(label);
             i31->argument = i29->argument;
-            push_to_array(array, i31);
+            addElement(array, i31);
 
             break;
     }

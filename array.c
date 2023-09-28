@@ -7,7 +7,7 @@ void initialize(struct Array* array) {
     array->lastIndex = -1;
 }
 
-void push_to_array(struct Array* array, struct Instruction* instruction) {
+void addElement(struct Array* array, struct Instruction* instruction) {
     if (array->lastIndex >= MAX_ARRAY_SIZE) {
         printf("Array overflow\n");
         return;
