@@ -190,7 +190,7 @@ int execute(struct Node* p) {
             i8->operation = getOperation(assign);
             addElement(array, i8);
 
-            return GARBAGE;
+            break;
 
         case GREATERTHAN: ;
             int result3 = execute(p->args[0]) > execute(p->args[1]);
@@ -259,92 +259,111 @@ int execute(struct Node* p) {
             execute(p->args[0]);
             execute(p->args[1]);
 
-            return GARBAGE;
+            break;
 
         case IF: ;
-            execute(p->args[0]);
+            if (execute(p->args[0])) {
+                p = p->args[1];
+            }
+            else {
+                p = p->args[2];
+            }
 
-            struct Instruction* i20 = malloc(sizeof(struct Instruction));
-            i20->operation = getOperation(gofalse);
-            i20->argument = label_num++;
-            addElement(array, i20);
+            break;
 
-            execute(p->args[1]);
+            // execute(p->args[0]);
 
-            struct Instruction* i21 = malloc(sizeof(struct Instruction));
-            i21->operation = getOperation(jump);
-            i21->argument = label_num++;
-            addElement(array, i21);
+            // struct Instruction* i20 = malloc(sizeof(struct Instruction));
+            // i20->operation = getOperation(gofalse);
+            // i20->argument = label_num++;
+            // addElement(array, i20);
 
-            struct Instruction* i22 = malloc(sizeof(struct Instruction));
-            i22->operation = getOperation(label);
-            i22->argument = i20->argument;
-            addElement(array, i22);
+            // execute(p->args[1]);
 
-            execute(p->args[2]);
+            // struct Instruction* i21 = malloc(sizeof(struct Instruction));
+            // i21->operation = getOperation(jump);
+            // i21->argument = label_num++;
+            // addElement(array, i21);
 
-            struct Instruction* i23 = malloc(sizeof(struct Instruction));
-            i23->operation = getOperation(label);
-            i23->argument = i21->argument;
-            addElement(array, i23);
+            // struct Instruction* i22 = malloc(sizeof(struct Instruction));
+            // i22->operation = getOperation(label);
+            // i22->argument = i20->argument;
+            // addElement(array, i22);
 
-            return GARBAGE;
+            // execute(p->args[2]);
+
+            // struct Instruction* i23 = malloc(sizeof(struct Instruction));
+            // i23->operation = getOperation(label);
+            // i23->argument = i21->argument;
+            // addElement(array, i23);
 
         case TERNARY: ;
-            execute(p->args[0]);
-
-            struct Instruction* i24 = malloc(sizeof(struct Instruction));
-            i24->operation = getOperation(gofalse);
-            i24->argument = label_num++;
-            addElement(array, i24);
-
-            execute(p->args[1]);
-
-            struct Instruction* i25 = malloc(sizeof(struct Instruction));
-            i25->operation = getOperation(jump);
-            i25->argument = label_num++;
-            addElement(array, i25);
-
-            struct Instruction* i26 = malloc(sizeof(struct Instruction));
-            i26->operation = getOperation(label);
-            i26->argument = i24->argument;
-            addElement(array, i26);
-
-            execute(p->args[2]);
-
-            struct Instruction* i27 = malloc(sizeof(struct Instruction));
-            i27->operation = getOperation(label);
-            i27->argument = i25->argument;
-            addElement(array, i27);
+                   if (execute(p->args[0])) {
+                p = p->args[1];
+            }
+            else {
+                p = p->args[2];
+            } 
 
             break;
+
+            // execute(p->args[0]);
+
+            // struct Instruction* i24 = malloc(sizeof(struct Instruction));
+            // i24->operation = getOperation(gofalse);
+            // i24->argument = label_num++;
+            // addElement(array, i24);
+
+            // execute(p->args[1]);
+
+            // struct Instruction* i25 = malloc(sizeof(struct Instruction));
+            // i25->operation = getOperation(jump);
+            // i25->argument = label_num++;
+            // addElement(array, i25);
+
+            // struct Instruction* i26 = malloc(sizeof(struct Instruction));
+            // i26->operation = getOperation(label);
+            // i26->argument = i24->argument;
+            // addElement(array, i26);
+
+            // execute(p->args[2]);
+
+            // struct Instruction* i27 = malloc(sizeof(struct Instruction));
+            // i27->operation = getOperation(label);
+            // i27->argument = i25->argument;
+            // addElement(array, i27);
 
         case WHILE: ;
-            struct Instruction* i28 = malloc(sizeof(struct Instruction));
-            i28->operation = getOperation(label);
-            i28->argument = label_num++;
-            addElement(array, i28);
 
-            execute(p->args[0]);
+            if (!p->args[0]) {
+                p = NULL;
+            }
 
-            struct Instruction* i29 = malloc(sizeof(struct Instruction));
-            i29->operation = getOperation(gofalse);
-            i29->argument = label_num++;
-            addElement(array, i29);
+            // struct Instruction* i28 = malloc(sizeof(struct Instruction));
+            // i28->operation = getOperation(label);
+            // i28->argument = label_num++;
+            // addElement(array, i28);
 
-            execute(p->args[1]);
+            // execute(p->args[0]);
 
-            struct Instruction* i30 = malloc(sizeof(struct Instruction));
-            i30->operation = getOperation(jump);
-            i30->argument = i28->argument;
-            addElement(array, i30);
+            // struct Instruction* i29 = malloc(sizeof(struct Instruction));
+            // i29->operation = getOperation(gofalse);
+            // i29->argument = label_num++;
+            // addElement(array, i29);
 
-            struct Instruction* i31 = malloc(sizeof(struct Instruction));
-            i31->operation = getOperation(label);
-            i31->argument = i29->argument;
-            addElement(array, i31);
+            // execute(p->args[1]);
 
-            break;
+            // struct Instruction* i30 = malloc(sizeof(struct Instruction));
+            // i30->operation = getOperation(jump);
+            // i30->argument = i28->argument;
+            // addElement(array, i30);
+
+            // struct Instruction* i31 = malloc(sizeof(struct Instruction));
+            // i31->operation = getOperation(label);
+            // i31->argument = i29->argument;
+            // addElement(array, i31);
+
+            // break;
     }
 
     return GARBAGE;
