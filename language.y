@@ -1,5 +1,4 @@
 %{
-  #include "global.h"
   #include "array.h"
   #include "symbol.h"
   #include <stdlib.h>

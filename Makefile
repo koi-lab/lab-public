@@ -12,7 +12,7 @@ lex.yy.c: language.l
 language.tab.c language.tab.h: language.y
 	bison -d language.y
 
-main.o: 	main.c global.h
+main.o: main.c
 	gcc $(CFLAGS) -c main.c 
 
 array.o: array.h
