@@ -55,7 +55,7 @@ void printTree(struct Node* p, int level) {
         case MOD: ;
             printf("MOD\n");
             break;
-        case EQUAL: ;
+        case ASSIGN: ;
             printf("=\n");
             break;
         case QUESTIONMARK: ;
@@ -177,7 +177,7 @@ int execute(struct Node* p) {
 
             return result2;
 
-        case EQUAL: ;
+        case ASSIGN: ;
             struct Instruction* i7 = malloc(sizeof(struct Instruction));
             i7->operation = getOperation(lvalue);
             i7->argument = p->args[0]->leaf_value;
