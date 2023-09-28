@@ -1,5 +1,5 @@
-OBJECTS = language.tab.o lex.yy.o array.o symbol.o error.o instruction.o main.o 
-SOURCES = language.tab.c lex.yy.c array.c symbol.c error.c instruction.c main.c 
+OBJECTS = language.tab.o lex.yy.o array.o symbol.o error.o instruction.o tree.o main.o 
+SOURCES = language.tab.c lex.yy.c array.c symbol.c error.c instruction.c tree.c main.c 
 EXE = infix2postfix
 CFLAGS += -Wall -g -lm
 
@@ -14,6 +14,9 @@ language.tab.c language.tab.h: language.y
 
 main.o: main.c
 	gcc $(CFLAGS) -c main.c 
+
+tree.o: tree.c symbol.c array.c
+	gcc $(CFLAGS) -c tree.c
 
 array.o: array.h
 	gcc $(CFLAGS) -c array.c

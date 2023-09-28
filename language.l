@@ -1,5 +1,6 @@
 %{
   #include "language.tab.h"
+  #include "symbol.h"
 
   #define NONE 0
 

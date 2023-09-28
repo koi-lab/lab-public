@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include "error.h"
+
 struct Operation operations[] = {{push, "push", 1},
                                  {rvalue, "rvalue", 1},
                                  {lvalue, "lvalue", 1},

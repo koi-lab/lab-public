@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "array.h"
 
 void initialize(struct Array* array) {
+   
     array->lastIndex = -1;
 }
 
