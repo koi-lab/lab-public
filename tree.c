@@ -160,7 +160,15 @@ int execute(struct Node* p) {
             return p->leaf_value;
 
         case DIV: ;
-            int result1 = execute(p->args[0]) / execute(p->args[1]);
+            int div0 = execute(p->args[0]);
+            int div1 = execute(p->args[1]);
+            if (div0 == 0) {
+                p = p->args[0];
+            } else if (div1 == 1) {
+                p = p->args[1];
+            };
+
+            int result1 = div0 / div1;
 
             struct Instruction* i5 = malloc(sizeof(struct Instruction));
             i5->operation = getOperation(divide);
@@ -169,7 +177,12 @@ int execute(struct Node* p) {
             return result1;
 
         case MOD: ;
-            int result2 = execute(p->args[0]) % execute(p->args[1]);
+            int mod0 = execute(p->args[0]);
+            int mod1 = execute(p->args[1]);
+            if (mod1 == 1) {
+                p = p->args[0];
+            }
+            int result2 = mod0 % mod1;
 
             struct Instruction* i6 = malloc(sizeof(struct Instruction));
             i6->operation = getOperation(modulo);
@@ -211,7 +224,15 @@ int execute(struct Node* p) {
             return result4;
 
         case PLUS: ;
-            int result5 = execute(p->args[0]) + execute(p->args[1]);
+            int plus0 = execute(p->args[0]);
+            int plus1 = execute(p->args[1]);
+            if (plus0 == 0) {
+                p = p->args[1];
+            } else if (plus1 == 0) {
+                p = p->args[0];
+            };
+
+            int result5 = plus0+plus1;
 
             struct Instruction* i3 = malloc(sizeof(struct Instruction));
             i3->operation = getOperation(plus);
@@ -220,7 +241,13 @@ int execute(struct Node* p) {
             return result5;
 
         case MINUS: ;
-            int result6 = execute(p->args[0]) - execute(p->args[1]);
+            int minus0 = execute(p->args[0]);
+            int minus1 = execute(p->args[1]);
+            if (minus1 == 0) {
+                p = p->args[0];
+            };
+
+            int result6 = minus0 - minus1;
 
             struct Instruction* i11 = malloc(sizeof(struct Instruction));
             i11->operation = getOperation(minus);
@@ -229,7 +256,17 @@ int execute(struct Node* p) {
             return result6;
 
         case STAR: ;
-            int result7 = execute(p->args[0]) * execute(p->args[1]);
+            int star0 = execute(p->args[0]);
+            int star1 = execute(p->args[1]);
+            if (star0*star1 ==0) {
+                p = makeLeaf(NUM, 0);
+            } else if (star0==1) {
+                p = p->args[1];
+            } else if (star1==1) {
+                p = p->args[0];
+            };
+ 
+            int result7 = star0 * star1;
 
             struct Instruction* i4 = malloc(sizeof(struct Instruction));
             i4->operation = getOperation(times);
@@ -238,7 +275,15 @@ int execute(struct Node* p) {
             return result7;
 
         case SLASH: ;
-            int result8 = execute(p->args[0]) / execute(p->args[1]);
+            int slash0 = execute(p->args[0]);
+            int slash1 = execute(p->args[1]);
+            if (slash0 == 0) {
+                p = p->args[0];
+            } else if (slash1 == 1) {
+                p = p->args[1];
+            };
+
+            int result8 = slash0 / slash1;
 
             struct Instruction* i12 = malloc(sizeof(struct Instruction));
             i12->operation = getOperation(divide);
@@ -247,7 +292,13 @@ int execute(struct Node* p) {
             return result8;
 
         case PERCENT: ;
-            int result9 = execute(p->args[0]) % execute(p->args[1]);
+            int percent0 = execute(p->args[0]);
+            int percent1 = execute(p->args[1]);
+            if (percent1 == 1) {
+                p = p->args[0];
+            }
+
+            int result9 = percent0 % percent1;
 
             struct Instruction* i13 = malloc(sizeof(struct Instruction));
             i13->operation = getOperation(modulo);
