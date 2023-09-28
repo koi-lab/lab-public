@@ -35,7 +35,7 @@
 
 %%
 
-start: statements { } END {  array = malloc(sizeof(struct Array)); initialize(array); execute($1); printArray(array); } start DONE
+start: statements { } END {  array = malloc(sizeof(struct Array)); initialize(array); printTree($1, 0); execute($1); printArray(array); } start DONE
        | /* empty */
        ;
 
@@ -66,7 +66,7 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     | expr NOTEQUALTO expr                  { $$ = makeNode(NOTEQUALTO, $1, $3, NULL); }
     | expr GREATERTHANOREQUALTO expr        { $$ = makeNode(GREATERTHANOREQUALTO, $1, $3, NULL); }
     | expr LESSTHANOREQUALTO expr            { $$ = makeNode(LESSTHANOREQUALTO, $1, $3, NULL); }
-    | NOT expr                              { $$ = makeNode(NOT, $1, NULL, NULL); }
+    | NOT expr                              { $$ = makeNode(NOT, $2, NULL, NULL); }
     | expr ASSIGN expr                      { $$ = makeNode(ASSIGN, $1, $3, NULL); }
     | NUM                                   { $$ = makeLeaf(NUM, $1); }
     | ID                                    { $$ = makeLeaf(ID, $1); }

@@ -219,12 +219,6 @@ int execute(struct Node* p) {
 
             return result34;
 
-if (3> 1 | 8 <2) {465;}  else {345;};
-if (5>2 & 2<3) {25;} else {2345;};
-if (1==2) {354;};      
-if (!1) {23442;};
-end
-
         case NOTEQUALTO: ;
             int result35 = execute(p->args[0]) != execute(p->args[1]);
 
@@ -244,7 +238,9 @@ end
             return result36;
 
         case PIPE: ;
-            int result37 = execute(p->args[0]) || execute(p->args[1]);
+            int pipe1 = execute(p->args[0]);
+            int pipe2 = execute(p->args[1]);
+            int result37 = pipe1 || pipe2;
 
             struct Instruction* i37 = malloc(sizeof(struct Instruction));
             i37->operation = getOperation(stackop_or);
@@ -253,7 +249,9 @@ end
             return result37;
 
         case AMPERSAND: ;
-            int result38 = execute(p->args[0]) && execute(p->args[1]);
+            int amp1 = execute(p->args[0]);
+            int amp2 = execute(p->args[1]);
+            int result38 = amp1 && amp2;
 
             struct Instruction* i38 = malloc(sizeof(struct Instruction));
             i38->operation = getOperation(stackop_and);
