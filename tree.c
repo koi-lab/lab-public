@@ -192,6 +192,75 @@ int execute(struct Node* p) {
 
             return GARBAGE;
 
+        case GREATERTHANOREQUALTO: ;
+            int result32 = execute(p->args[0]) >= execute(p->args[1]);
+
+            struct Instruction* i32 = malloc(sizeof(struct Instruction));
+            i32->operation = getOperation(ge);
+            addElement(array, i32);
+
+            return result32;
+
+        case LESSTHANOREQUALTO: ;
+            int result33 = execute(p->args[0]) <= execute(p->args[1]);
+
+            struct Instruction* i33 = malloc(sizeof(struct Instruction));
+            i33->operation = getOperation(le);
+            addElement(array, i33);
+
+            return result33;
+
+        case EQUALTO: ;
+            int result34 = execute(p->args[0]) == execute(p->args[1]);
+
+            struct Instruction* i34 = malloc(sizeof(struct Instruction));
+            i34->operation = getOperation(eq);
+            addElement(array, i34);
+
+            return result34;
+
+if (3> 1 | 8 <2) {465;}  else {345;};
+if (5>2 & 2<3) {25;} else {2345;};
+if (1==2) {354;};      
+if (!1) {23442;};
+end
+
+        case NOTEQUALTO: ;
+            int result35 = execute(p->args[0]) != execute(p->args[1]);
+
+            struct Instruction* i35 = malloc(sizeof(struct Instruction));
+            i35->operation = getOperation(ne);
+            addElement(array, i35);
+
+            return result35;
+
+        case NOT: ;
+            int result36 = !execute(p->args[0]);
+
+            struct Instruction* i36 = malloc(sizeof(struct Instruction));
+            i36->operation = getOperation(stackop_not);
+            addElement(array, i36);
+
+            return result36;
+
+        case PIPE: ;
+            int result37 = execute(p->args[0]) || execute(p->args[1]);
+
+            struct Instruction* i37 = malloc(sizeof(struct Instruction));
+            i37->operation = getOperation(stackop_or);
+            addElement(array, i37);
+
+            return result37;
+
+        case AMPERSAND: ;
+            int result38 = execute(p->args[0]) && execute(p->args[1]);
+
+            struct Instruction* i38 = malloc(sizeof(struct Instruction));
+            i38->operation = getOperation(stackop_and);
+            addElement(array, i38);
+
+            return result38;
+
         case GREATERTHAN: ;
             int result3 = execute(p->args[0]) > execute(p->args[1]);
 
