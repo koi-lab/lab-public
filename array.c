@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include "array.h"
 
-void initialize(struct Array* array) {
-   
+void initialize(struct Array* array) { 
     array->lastIndex = -1;
 }
 

@@ -1,11 +1,12 @@
 %{
   #include "array.h"
   #include "symbol.h"
+  #include "tree.h"
+  #include "language.tab.h"
+
   #include <stdlib.h>
   #include <stdbool.h>
   #include <stdio.h>
-  #include "language.tab.h"
-  #include "tree.h"
 
   extern void yyerror(char*);
   int yylex(void);
@@ -26,13 +27,11 @@
   int int_value;
 }
 
-%type <p> expr;
-%type <p> statements;
-%type <p> else;
+%type <p> expr statements else;
 
 %%
 
-start: statements { } END {  array = malloc(sizeof(struct Array)); initialize(array); execute(&$1); printTree($1, 0); } start DONE
+start: statements { } END { array = malloc(sizeof(struct Array)); initialize(array); execute(&$1); printTree($1, 0); } start DONE
        | /* empty */
        ;
 
