@@ -32,7 +32,7 @@
 
 %%
 
-start: statements { } END {  array = malloc(sizeof(struct Array)); initialize(array); execute($1); printArray(array); } start DONE
+start: statements { } END {  array = malloc(sizeof(struct Array)); initialize(array); execute($1); printTree($1, 0); } start DONE
        | /* empty */
        ;
 
