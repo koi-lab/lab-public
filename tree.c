@@ -29,7 +29,7 @@ struct Node* makeNode(int type, struct Node* a0, struct Node* a1,
     return p;
 };
 
-void print_spaces(int count) {
+void printSpaces(int count) {
     for (int i = 0; i < count; i++) {
         printf(" ");
     }
@@ -40,7 +40,7 @@ void printTree(struct Node* p, int level) {
         return;
     }
 
-    print_spaces(level * 2);
+    printSpaces(level * 2);
 
     switch (p->type) {
         case ID: ;
