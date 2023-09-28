@@ -143,33 +143,33 @@ int execute(struct Node** p) {
         return GARBAGE;
     }
 
-    switch ((*p)->type) {
+    switch ((**p).type) {
         case ID:;
-            if (symtable[(*p)->leaf_value].initialized) {
+            if (symtable[(**p).leaf_value].initialized) {
                 struct Instruction* i = malloc(sizeof(struct Instruction));
                 i->operation = getOperation(rvalue);
-                i->argument = (*p)->leaf_value;
+                i->argument = (**p).leaf_value;
                 addElement(array, i);
 
-                return symtable[(*p)->leaf_value].value;
+                return symtable[(**p).leaf_value].value;
             }
             error("❗️ An uninitialized variable is used.\n");
 
         case NUM:;
             struct Instruction* i2 = malloc(sizeof(struct Instruction));
             i2->operation = getOperation(push);
-            i2->argument = (*p)->leaf_value;
+            i2->argument = (**p).leaf_value;
             addElement(array, i2);
 
-            return (*p)->leaf_value;
+            return (**p).leaf_value;
 
         case DIV:;
-            int div0 = execute(&((*p)->args[0]));
-            int div1 = execute(&((*p)->args[1]));
+            int div0 = execute(&((**p).args[0]));
+            int div1 = execute(&((**p).args[1]));
             if (div0 == 0) {
-                *p = (*p)->args[0];
+                *p = (**p).args[0];
             } else if (div1 == 1) {
-                *p = (*p)->args[1];
+                *p = (**p).args[1];
             };
 
             int result1 = div0 / div1;
@@ -177,24 +177,24 @@ int execute(struct Node** p) {
             return result1;
 
         case MOD:;
-            int mod0 = execute(&((*p)->args[0]));
-            int mod1 = execute(&((*p)->args[1]));
+            int mod0 = execute(&((**p).args[0]));
+            int mod1 = execute(&((**p).args[1]));
             if (mod1 == 1) {
-                *p = (*p)->args[0];
+                *p = (**p).args[0];
             }
             int result2 = mod0 % mod1;
 
             return result2;
 
         case EQUAL:;
-            symtable[(*p)->args[0]->leaf_value].value =
-                execute(&((*p)->args[1]));
-            symtable[(*p)->args[0]->leaf_value].initialized = true;
+            symtable[(**p).args[0]->leaf_value].value =
+                execute(&((**p).args[1]));
+            symtable[(**p).args[0]->leaf_value].initialized = true;
 
             break;
 
         case GREATERTHAN:;
-            int result3 = execute(&((*p)->args[0])) > execute(&((*p)->args[1]));
+            int result3 = execute(&((**p).args[0])) > execute(&((**p).args[1]));
 
             struct Instruction* i9 = malloc(sizeof(struct Instruction));
             i9->operation = getOperation(gt);
@@ -203,7 +203,7 @@ int execute(struct Node** p) {
             return result3;
 
         case LESSTHAN:;
-            int result4 = execute(&((*p)->args[0])) < execute(&((*p)->args[1]));
+            int result4 = execute(&((**p).args[0])) < execute(&((**p).args[1]));
 
             struct Instruction* i10 = malloc(sizeof(struct Instruction));
             i10->operation = getOperation(lt);
@@ -212,12 +212,12 @@ int execute(struct Node** p) {
             return result4;
 
         case PLUS:;
-            int plus0 = execute(&((*p)->args[0]));
-            int plus1 = execute(&((*p)->args[1]));
+            int plus0 = execute(&((**p).args[0]));
+            int plus1 = execute(&((**p).args[1]));
             if (plus0 == 0) {
-                *p = (*p)->args[1];
+                *p = (**p).args[1];
             } else if (plus1 == 0) {
-                *p = (*p)->args[0];
+                *p = (**p).args[0];
             };
 
             int result5 = plus0 + plus1;
@@ -229,10 +229,10 @@ int execute(struct Node** p) {
             return result5;
 
         case MINUS:;
-            int minus0 = execute(&((*p)->args[0]));
-            int minus1 = execute(&((*p)->args[1]));
+            int minus0 = execute(&((**p).args[0]));
+            int minus1 = execute(&((**p).args[1]));
             if (minus1 == 0) {
-                *p = (*p)->args[0];
+                *p = (**p).args[0];
             };
 
             int result6 = minus0 - minus1;
@@ -244,14 +244,14 @@ int execute(struct Node** p) {
             return result6;
 
         case STAR:;
-            int star0 = execute(&((*p)->args[0]));
-            int star1 = execute(&((*p)->args[1]));
+            int star0 = execute(&((**p).args[0]));
+            int star1 = execute(&((**p).args[1]));
             if (star0 * star1 == 0) {
                 *p = makeLeaf(NUM, 0);
             } else if (star0 == 1) {
-                *p = (*p)->args[1];
+                *p = (**p).args[1];
             } else if (star1 == 1) {
-                *p = (*p)->args[0];
+                *p = (**p).args[0];
             };
 
             int result7 = star0 * star1;
@@ -259,12 +259,12 @@ int execute(struct Node** p) {
             return result7;
 
         case SLASH:;
-            int slash0 = execute(&((*p)->args[0]));
-            int slash1 = execute(&((*p)->args[1]));
+            int slash0 = execute(&((**p).args[0]));
+            int slash1 = execute(&((**p).args[1]));
             if (slash0 == 0) {
-                *p = (*p)->args[0];
+                *p = (**p).args[0];
             } else if (slash1 == 1) {
-                *p = (*p)->args[1];
+                *p = (**p).args[1];
             };
 
             int result8 = slash0 / slash1;
@@ -272,10 +272,10 @@ int execute(struct Node** p) {
             return result8;
 
         case PERCENT:;
-            int percent0 = execute(&((*p)->args[0]));
-            int percent1 = execute(&((*p)->args[1]));
+            int percent0 = execute(&((**p).args[0]));
+            int percent1 = execute(&((**p).args[1]));
             if (percent1 == 1) {
-                *p = (*p)->args[0];
+                *p = (**p).args[0];
             }
 
             int result9 = percent0 % percent1;
@@ -283,38 +283,38 @@ int execute(struct Node** p) {
             return result9;
 
         case STATEMENTS:;
-            execute(&((*p)->args[0]));
-            execute(&((*p)->args[1]));
+            execute(&((**p).args[0]));
+            execute(&((**p).args[1]));
 
             break;
 
         case IF:;
-            if (execute(&((*p)->args[0]))) {
-               execute(&((*p)->args[1])); 
-                *p = (*p)->args[1];
+            if (execute(&((**p).args[0]))) {
+               execute(&((**p).args[1])); 
+                *p = (**p).args[1];
             } else {
-                execute(&((*p)->args[2]));
-                *p = (*p)->args[2];
+                execute(&((**p).args[2]));
+                *p = (**p).args[2];
             }
 
             break;
 
         case TERNARY:;
-            if (execute(&((*p)->args[0]))) {
-                execute(&((*p)->args[1])); 
-                *p = (*p)->args[1];
+            if (execute(&((**p).args[0]))) {
+                execute(&((**p).args[1])); 
+                *p = (**p).args[1];
             } else {
-                execute(&((*p)->args[2])); 
-                *p = (*p)->args[2];
+                execute(&((**p).args[2])); 
+                *p = (**p).args[2];
             }
 
             break;
 
         case WHILE:;
-            if (!(*p)->args[0]) {
+            if (!(**p).args[0]) {
                 *p = NULL;
             } else {
-                execute(&((*p)->args[1]));
+                execute(&((**p).args[1]));
             }
     }
 
