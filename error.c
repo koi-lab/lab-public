@@ -1,10 +1,13 @@
 /* error.c */
 
-#include "global.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-void error(char* message)  /* generates all error messages  */
+extern int lineno;
+
+void error(char* message) /* generates all error messages  */
 {
     fflush(stdout);
     fprintf(stderr, "[Error on line %d: %s]\n", lineno, message);
-    exit(EXIT_FAILURE);  /*  unsuccessful termination  */
+    exit(EXIT_FAILURE); /*  unsuccessful termination  */
 }

@@ -3,6 +3,9 @@
   #include "language.tab.h"
   union value install_id(char* s, int n);
   extern union value yylval;
+
+  #define NONE 0
+  
   int  token_value = NONE;
   int  lineno = 1;
 %}

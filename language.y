@@ -1,12 +1,20 @@
 %{
   #include "global.h"
+  #include "array.h"
+  #include "symbol.h"
+  #include <stdlib.h>
+  #include <stdbool.h>
+  #include <stdio.h>
+  #include "language.tab.h"
+
+  #define GARBAGE 0
+  #define TERNARY 999
 
   extern void yyerror(char*);
   int yylex(void);
   
-  void print_spaces(int count);
-  void print_the_tree(struct Node* p, int level);
   int execute(struct Node* p);
+  
 
 #define MAX_ARGS 3
 
@@ -32,107 +40,56 @@ struct Node* mknode(int type, struct Node* a0, struct Node* a1, struct Node* a2)
   return p;
 };
 
-enum OperationType {
-    push,         // Push a number
-    rvalue,       // Push the contents of a variable
-    lvalue,       // Push a reference to a variable
-    pop,
-    assign,
-    copy,
-    plus, minus, times, divide, modulo,
-    eq, ne, lt, gt, le, ge, // ==, !=, <, >, <=, >=
-    stackop_or, stackop_and, stackop_not, // |, &, !
-    stackop_read, stackop_write,
-    label,        // Realistically, this shouldn't really be an instruction
-    jump,
-    gofalse,
-    gotrue,
-    halt
-};
 
-struct Operation {
-    enum OperationType type;
-    const char* name;
-    int hasArgument;
-};
-
-struct Operation operations[] = {
-    { push, "push", 1 },
-    { rvalue, "rvalue", 1 },
-    { lvalue, "lvalue", 1 },
-    { pop, "pop", 0 },
-    { assign, "assign", 0 },
-    { copy, "copy", 0 },
-    { plus, "plus", 0 },
-    { minus, "minus", 0 },
-    { times, "times",  0 },
-    { divide, "divide", 0 },
-    { modulo, "modulo", 0 },
-    { eq, "eq", 0 },
-    { ne, "ne", 0 },
-    { lt, "lt", 0 },
-    { gt, "gt", 0 },
-    { le, "le", 0 },
-    { ge, "ge", 0 },
-    { stackop_or, "or", 0 },
-    { stackop_and, "and", 0 },
-    { stackop_not, "not", 0 },
-    { stackop_read, "read", 0 },
-    { stackop_write, "write", 0 },
-    { label, "label", 1 },
-    { jump, "jump", 1 },
-    { gofalse, "gofalse", 1 },
-    { gotrue, "gotrue", 1 },
-    { halt, "halt", 0 }
-};
-
-const struct Operation getOperation(enum OperationType type) {
-    for (size_t i = 0; i < sizeof(operations) / sizeof(operations[0]); i++) {
-        if (operations[i].type == type) {
-            return operations[i];
-        }
+void print_spaces(int count) {
+    for (int i = 0; i < count; i++) {
+        printf(" ");
     }
-  error("Operation not found.");
 }
 
-struct Instruction {
-  struct Operation operation;
-  int argument;
-};
-
-#define MAX_ARRAY_SIZE 200
-
-struct Array {
-  struct Instruction* data[MAX_ARRAY_SIZE];
-  int lastIndex;
-};
-
-void initialize(struct Array* array) {
-    array->lastIndex = -1;
-}
-
-void push_to_array(struct Array* array, struct Instruction* instruction) {
-    if (array->lastIndex >= MAX_ARRAY_SIZE) {
-        printf("Array overflow\n");
+void print_the_tree(struct Node* p, int level) {
+    if (p == NULL) {
         return;
     }
-    array->data[++array->lastIndex] = instruction;
-}
 
-void printArray(struct Array* array) {
-    printf("#include <iostream>\n#include <vector>\n#include <map>\n#include <string>\n#include <sstream>\n#include \"StackMachine.h\"\n\nint main() {\n  StackMachine sm;\n\n  try {\n");
+    print_spaces(level * 2);
 
-    for (int i = 0; i < array->lastIndex + 1; ++i) {
-      if (array->data[i]->operation.hasArgument) {
-        printf("    sm.append(Instruction(%s, %d));\n", array->data[i]->operation.name, array->data[i]->argument);
-      }
-      else {
-        printf("    sm.append(Instruction(%s));\n", array->data[i]->operation.name); 
-      }
+    switch (p->type) {
+        case ID: printf("%s\n", symtable[p->leaf_value].lexeme); break;
+        case DONE: printf("DONE\n"); break;
+        case DIV: printf("DIV\n"); break;
+        case MOD: printf("MOD\n"); break;
+        case EQUAL: printf("=\n"); break;
+        case QUESTIONMARK: printf("?\n"); break;
+        case COLON: printf(":\n"); break;
+        case PIPE: printf("|\n"); break;
+        case AMPERSAND: printf("&\n"); break;
+        case GREATERTHAN: printf(">\n"); break;
+        case LESSTHAN: printf("<\n"); break;
+        case PLUS: printf("+\n"); break;
+        case MINUS: printf("-\n"); break;
+        case STAR: printf("*\n"); break;
+        case SLASH: printf("/\n"); break;
+        case PERCENT: printf("%%\n"); break;
+        case CARET: printf("^\n"); break;
+        case LPAREN: printf("(\n"); break;
+        case RPAREN: printf(")\n"); break;
+        case NEWLINE: printf("\\n\n"); break;
+        case SEMICOLON: printf(";\n"); break;
+        case STATEMENTS: printf("statements\n"); break;
+        case WHILE: printf("while\n"); break;
+        case IF: printf("if\n"); break;
+        case TERNARY: printf("?:\n"); break;
+        case PRINT: printf("print\n"); break;
+        case READ: printf("read\n"); break;
+        default: printf("%d\n", p->leaf_value); break;
     }
 
-    printf("    sm.append(Instruction(halt));\n\n    sm.showstate();\n    sm.list_program();\n    sm.set_trace(1);\n    sm.run();\n    sm.showstate();\n  }\n  catch(Exception& e) {\n    std::cout << \"*** Exception caught: \" << e.message() << std::endl;\n    sm.showstate();\n    sm.list_program();\n}\n\n  return 0;\n}\n");
+    for (int i = 0; i < MAX_ARGS; i++) {
+        print_the_tree(p->args[i], level + 1);
+    }
 }
+
 
 int label_num = 0;
 struct Array* array;
@@ -194,58 +151,8 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     ;
 %%
 
-// Function to print spaces for indentation
-void print_spaces(int count) {
-    for (int i = 0; i < count; i++) {
-        printf(" ");
-    }
-}
 
-void print_the_tree(struct Node* p, int level) {
-    if (p == NULL) {
-        return;
-    }
 
-    // Print spaces for indentation
-    print_spaces(level * 2);
-
-    // Print the node based on its type
-    switch (p->type) {
-        case ID: printf("%s\n", symtable[p->leaf_value].lexeme); break;
-        case DONE: printf("DONE\n"); break;
-        case DIV: printf("DIV\n"); break;
-        case MOD: printf("MOD\n"); break;
-        case EQUAL: printf("=\n"); break;
-        case QUESTIONMARK: printf("?\n"); break;
-        case COLON: printf(":\n"); break;
-        case PIPE: printf("|\n"); break;
-        case AMPERSAND: printf("&\n"); break;
-        case GREATERTHAN: printf(">\n"); break;
-        case LESSTHAN: printf("<\n"); break;
-        case PLUS: printf("+\n"); break;
-        case MINUS: printf("-\n"); break;
-        case STAR: printf("*\n"); break;
-        case SLASH: printf("/\n"); break;
-        case PERCENT: printf("%%\n"); break;
-        case CARET: printf("^\n"); break;
-        case LPAREN: printf("(\n"); break;
-        case RPAREN: printf(")\n"); break;
-        case NEWLINE: printf("\\n\n"); break;
-        case SEMICOLON: printf(";\n"); break;
-        case STATEMENTS: printf("statements\n"); break;
-        case WHILE: printf("while\n"); break;
-        case IF: printf("if\n"); break;
-        case TERNARY: printf("?:\n"); break;
-        case PRINT: printf("print\n"); break;
-        case READ: printf("read\n"); break;
-        default: printf("%d\n", p->leaf_value); break;
-    }
-
-    // Recursively print the children nodes
-    for (int i = 0; i < MAX_ARGS; i++) {
-        print_the_tree(p->args[i], level + 1);
-    }
-}
 
 void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);
