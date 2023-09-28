@@ -5,7 +5,6 @@
 
 #define MAX_SYMBOLS 100 /* size of symbol table */
 
-
 struct symentry { /*  form of symbol table entry  */
     char *lexeme;
     int token_type;

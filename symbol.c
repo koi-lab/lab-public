@@ -2,6 +2,7 @@
 
 #include "symbol.h"
 #include "error.h"
+
 #include <string.h>
 
 struct symentry symtable[MAX_SYMBOLS];
