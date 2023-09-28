@@ -31,7 +31,7 @@
 
 %%
 
-start: statements { } END { array = malloc(sizeof(struct Array)); initialize(array); printf("Original tree:\n"); printTree($1, 0); execute(&$1); printf("Optimized tree:\n"); printTree($1, 0); } start DONE
+start: statements { } END { array = malloc(sizeof(struct Array)); initialize(array); printf("\nOriginal tree:\n"); printTree($1, 0); execute(&$1); printf("Optimized tree:\n"); printTree($1, 0); } start DONE
        | /* empty */
        ;
  

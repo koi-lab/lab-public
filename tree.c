@@ -121,7 +121,7 @@ void printTree(struct Node* p, int level) {
             printf("if\n");
             break;
         case TERNARY:;
-            printf("?: ;\n");
+            printf("?:\n");
             break;
         case PRINT:;
             printf("print\n");
