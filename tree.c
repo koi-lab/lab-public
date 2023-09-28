@@ -19,7 +19,8 @@ struct Node* makeLeaf(int type, int value) {
     return p;
 };
 
-struct Node* makeNode(int type, struct Node* a0, struct Node* a1, struct Node* a2) {
+struct Node* makeNode(int type, struct Node* a0, struct Node* a1,
+                      struct Node* a2) {
     struct Node* p = malloc(sizeof(struct Node));
     p->type = type;
     p->args[0] = a0;
@@ -290,7 +291,7 @@ int execute(struct Node** p) {
 
         case IF:;
             if (execute(&((**p).args[0]))) {
-               execute(&((**p).args[1])); 
+                execute(&((**p).args[1]));
                 *p = (**p).args[1];
             } else {
                 execute(&((**p).args[2]));
@@ -301,10 +302,10 @@ int execute(struct Node** p) {
 
         case TERNARY:;
             if (execute(&((**p).args[0]))) {
-                execute(&((**p).args[1])); 
+                execute(&((**p).args[1]));
                 *p = (**p).args[1];
             } else {
-                execute(&((**p).args[2])); 
+                execute(&((**p).args[2]));
                 *p = (**p).args[2];
             }
 
