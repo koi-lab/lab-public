@@ -14,12 +14,6 @@ print(product);
 a = 1 < 2 ? 100 : 200;
 print(a);
 
-b = 2 ^ 10;
-print(b);
-
-c = 2^(3*4)*6^2^(1 mod 5)^2 * 100 div (10^2);
-print(c);
-
 d = 10 | 15;
 print(d);
 

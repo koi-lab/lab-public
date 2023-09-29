@@ -20,7 +20,7 @@ struct Node* makeLeaf(int type, int value) {
 };
 
 struct Node* makeNode(int type, struct Node* a0, struct Node* a1,
-                    struct Node* a2) {
+                      struct Node* a2) {
     struct Node* p = malloc(sizeof(struct Node));
     p->type = type;
     p->args[0] = a0;
@@ -43,88 +43,88 @@ void printTree(struct Node* p, int level) {
     printSpaces(level * 2);
 
     switch (p->type) {
-        case ID: ;
+        case ID:;
             printf("%s\n", symtable[p->leaf_value].lexeme);
             break;
-        case DONE: ;
+        case DONE:;
             printf("DONE\n");
             break;
-        case DIV: ;
+        case DIV:;
             printf("DIV\n");
             break;
-        case MOD: ;
+        case MOD:;
             printf("MOD\n");
             break;
-        case ASSIGN: ;
+        case ASSIGN:;
             printf("=\n");
             break;
-        case QUESTIONMARK: ;
+        case QUESTIONMARK:;
             printf("?\n");
             break;
-        case COLON: ;
+        case COLON:;
             printf(": ;\n");
             break;
-        case PIPE: ;
+        case PIPE:;
             printf("|\n");
             break;
-        case AMPERSAND: ;
+        case AMPERSAND:;
             printf("&\n");
             break;
-        case GREATERTHAN: ;
+        case GREATERTHAN:;
             printf(">\n");
             break;
-        case LESSTHAN: ;
+        case LESSTHAN:;
             printf("<\n");
             break;
-        case PLUS: ;
+        case PLUS:;
             printf("+\n");
             break;
-        case MINUS: ;
+        case MINUS:;
             printf("-\n");
             break;
-        case STAR: ;
+        case STAR:;
             printf("*\n");
             break;
-        case SLASH: ;
+        case SLASH:;
             printf("/\n");
             break;
-        case PERCENT: ;
+        case PERCENT:;
             printf("%%\n");
             break;
-        case CARET: ;
+        case CARET:;
             printf("^\n");
             break;
-        case LPAREN: ;
+        case LPAREN:;
             printf("(\n");
             break;
-        case RPAREN: ;
+        case RPAREN:;
             printf(")\n");
             break;
-        case NEWLINE: ;
+        case NEWLINE:;
             printf("\\n\n");
             break;
-        case SEMICOLON: ;
+        case SEMICOLON:;
             printf(";\n");
             break;
-        case STATEMENTS: ;
+        case STATEMENTS:;
             printf("statements\n");
             break;
-        case WHILE: ;
+        case WHILE:;
             printf("while\n");
             break;
-        case IF: ;
+        case IF:;
             printf("if\n");
             break;
-        case TERNARY: ;
+        case TERNARY:;
             printf("?: ;\n");
             break;
-        case PRINT: ;
+        case PRINT:;
             printf("print\n");
             break;
-        case READ: ;
+        case READ:;
             printf("read\n");
             break;
-        default: ;
+        default:;
             printf("%d\n", p->leaf_value);
             break;
     }
@@ -140,18 +140,18 @@ int execute(struct Node* p) {
     }
 
     switch (p->type) {
-        case ID: ;
-            if (symtable[p->leaf_value].initialized) {
-                struct Instruction* i = malloc(sizeof(struct Instruction));
-                i->operation = getOperation(rvalue);
-                i->argument = p->leaf_value;
-                addElement(array, i);
+        case ID:;
+            // if (symtable[p->leaf_value].initialized) {
+            struct Instruction* i = malloc(sizeof(struct Instruction));
+            i->operation = getOperation(rvalue);
+            i->argument = p->leaf_value;
+            addElement(array, i);
 
-                return symtable[p->leaf_value].value;
-            }
-            error("❗️ You use an uninitialized variable.\n");
+            return symtable[p->leaf_value].value;
+            // }
+            // error("❗️ You used an uninitialized variable.\n");
 
-        case NUM: ;
+        case NUM:;
             struct Instruction* i2 = malloc(sizeof(struct Instruction));
             i2->operation = getOperation(push);
             i2->argument = p->leaf_value;
@@ -159,7 +159,7 @@ int execute(struct Node* p) {
 
             return p->leaf_value;
 
-        case DIV: ;
+        case DIV:;
             int result1 = execute(p->args[0]) / execute(p->args[1]);
 
             struct Instruction* i5 = malloc(sizeof(struct Instruction));
@@ -168,7 +168,7 @@ int execute(struct Node* p) {
 
             return result1;
 
-        case MOD: ;
+        case MOD:;
             int result2 = execute(p->args[0]) % execute(p->args[1]);
 
             struct Instruction* i6 = malloc(sizeof(struct Instruction));
@@ -177,7 +177,7 @@ int execute(struct Node* p) {
 
             return result2;
 
-        case ASSIGN: ;
+        case ASSIGN:;
             struct Instruction* i7 = malloc(sizeof(struct Instruction));
             i7->operation = getOperation(lvalue);
             i7->argument = p->args[0]->leaf_value;
@@ -192,7 +192,7 @@ int execute(struct Node* p) {
 
             return GARBAGE;
 
-        case GREATERTHANOREQUALTO: ;
+        case GREATERTHANOREQUALTO:;
             int result32 = execute(p->args[0]) >= execute(p->args[1]);
 
             struct Instruction* i32 = malloc(sizeof(struct Instruction));
@@ -201,7 +201,7 @@ int execute(struct Node* p) {
 
             return result32;
 
-        case LESSTHANOREQUALTO: ;
+        case LESSTHANOREQUALTO:;
             int result33 = execute(p->args[0]) <= execute(p->args[1]);
 
             struct Instruction* i33 = malloc(sizeof(struct Instruction));
@@ -210,7 +210,7 @@ int execute(struct Node* p) {
 
             return result33;
 
-        case EQUALTO: ;
+        case EQUALTO:;
             int result34 = execute(p->args[0]) == execute(p->args[1]);
 
             struct Instruction* i34 = malloc(sizeof(struct Instruction));
@@ -219,7 +219,7 @@ int execute(struct Node* p) {
 
             return result34;
 
-        case NOTEQUALTO: ;
+        case NOTEQUALTO:;
             int result35 = execute(p->args[0]) != execute(p->args[1]);
 
             struct Instruction* i35 = malloc(sizeof(struct Instruction));
@@ -228,7 +228,7 @@ int execute(struct Node* p) {
 
             return result35;
 
-        case NOT: ;
+        case NOT:;
             int result36 = !execute(p->args[0]);
 
             struct Instruction* i36 = malloc(sizeof(struct Instruction));
@@ -237,7 +237,7 @@ int execute(struct Node* p) {
 
             return result36;
 
-        case PIPE: ;
+        case PIPE:;
             int pipe1 = execute(p->args[0]);
             int pipe2 = execute(p->args[1]);
             int result37 = pipe1 || pipe2;
@@ -248,7 +248,7 @@ int execute(struct Node* p) {
 
             return result37;
 
-        case AMPERSAND: ;
+        case AMPERSAND:;
             int amp1 = execute(p->args[0]);
             int amp2 = execute(p->args[1]);
             int result38 = amp1 && amp2;
@@ -259,7 +259,7 @@ int execute(struct Node* p) {
 
             return result38;
 
-        case GREATERTHAN: ;
+        case GREATERTHAN:;
             int result3 = execute(p->args[0]) > execute(p->args[1]);
 
             struct Instruction* i9 = malloc(sizeof(struct Instruction));
@@ -268,7 +268,7 @@ int execute(struct Node* p) {
 
             return result3;
 
-        case LESSTHAN: ;
+        case LESSTHAN:;
             int result4 = execute(p->args[0]) < execute(p->args[1]);
 
             struct Instruction* i10 = malloc(sizeof(struct Instruction));
@@ -277,7 +277,7 @@ int execute(struct Node* p) {
 
             return result4;
 
-        case PLUS: ;
+        case PLUS:;
             int result5 = execute(p->args[0]) + execute(p->args[1]);
 
             struct Instruction* i3 = malloc(sizeof(struct Instruction));
@@ -286,7 +286,7 @@ int execute(struct Node* p) {
 
             return result5;
 
-        case MINUS: ;
+        case MINUS:;
             int result6 = execute(p->args[0]) - execute(p->args[1]);
 
             struct Instruction* i11 = malloc(sizeof(struct Instruction));
@@ -295,7 +295,7 @@ int execute(struct Node* p) {
 
             return result6;
 
-        case STAR: ;
+        case STAR:;
             int result7 = execute(p->args[0]) * execute(p->args[1]);
 
             struct Instruction* i4 = malloc(sizeof(struct Instruction));
@@ -304,7 +304,7 @@ int execute(struct Node* p) {
 
             return result7;
 
-        case SLASH: ;
+        case SLASH:;
             int result8 = execute(p->args[0]) / execute(p->args[1]);
 
             struct Instruction* i12 = malloc(sizeof(struct Instruction));
@@ -313,7 +313,7 @@ int execute(struct Node* p) {
 
             return result8;
 
-        case PERCENT: ;
+        case PERCENT:;
             int result9 = execute(p->args[0]) % execute(p->args[1]);
 
             struct Instruction* i13 = malloc(sizeof(struct Instruction));
@@ -322,13 +322,13 @@ int execute(struct Node* p) {
 
             return result9;
 
-        case STATEMENTS: ;
+        case STATEMENTS:;
             execute(p->args[0]);
             execute(p->args[1]);
 
             return GARBAGE;
 
-        case IF: ;
+        case IF:;
             execute(p->args[0]);
 
             struct Instruction* i20 = malloc(sizeof(struct Instruction));
@@ -357,7 +357,7 @@ int execute(struct Node* p) {
 
             return GARBAGE;
 
-        case TERNARY: ;
+        case TERNARY:;
             execute(p->args[0]);
 
             struct Instruction* i24 = malloc(sizeof(struct Instruction));
@@ -386,7 +386,7 @@ int execute(struct Node* p) {
 
             break;
 
-        case WHILE: ;
+        case WHILE:;
             struct Instruction* i28 = malloc(sizeof(struct Instruction));
             i28->operation = getOperation(label);
             i28->argument = label_num++;
@@ -410,6 +410,34 @@ int execute(struct Node* p) {
             i31->operation = getOperation(label);
             i31->argument = i29->argument;
             addElement(array, i31);
+
+            break;
+
+        case READ:;
+            struct Instruction* i51 = malloc(sizeof(struct Instruction));
+            i51->operation = getOperation(lvalue);
+            i51->argument = p->args[0]->leaf_value;
+            addElement(array, i51);
+
+            struct Instruction* i41 = malloc(sizeof(struct Instruction));
+            i41->operation = getOperation(stackop_read);
+            addElement(array, i41);
+
+            struct Instruction* i61 = malloc(sizeof(struct Instruction));
+            i61->operation = getOperation(assign);
+            addElement(array, i61);
+
+            break;
+
+        case PRINT:;
+            struct Instruction* i421 = malloc(sizeof(struct Instruction));
+            i421->operation = getOperation(push);
+            i421->argument = symtable[p->args[0]->leaf_value].value;
+            addElement(array, i421);
+
+            struct Instruction* i42 = malloc(sizeof(struct Instruction));
+            i42->operation = getOperation(stackop_write);
+            addElement(array, i42);
 
             break;
     }
