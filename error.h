@@ -1,0 +1,1 @@
+void error(char* message); /* generates all error messages  */

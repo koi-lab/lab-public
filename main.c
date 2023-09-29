@@ -1,9 +1,10 @@
 /* main.c */
 
-#include "global.h"
+#include <stdlib.h>
 
-int main(void)
-{
+void parse();
+
+int main(void) {
     parse();
-    exit(0);    /*  successful termination  */
+    exit(0); /*  successful termination  */
 }

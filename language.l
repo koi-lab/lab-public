@@ -1,8 +1,12 @@
 %{
-  #include "global.h"
   #include "language.tab.h"
+  #include "symbol.h"
+
+  #define NONE 0
+
   union value install_id(char* s, int n);
   extern union value yylval;
+  
   int  token_value = NONE;
   int  lineno = 1;
 %}
@@ -28,7 +32,12 @@ id	{letter}({letter}|{digit})*
 "}"        { return RCURLYBRACKET; }
 {id}	{ yylval = install_id(yytext, yyleng);
           return ID; }
-"="       { return EQUAL; }
+"=="      { return EQUALTO; }
+ "!="      { return NOTEQUALTO; }
+ ">="      { return GREATERTHANOREQUALTO; }
+ "<="      { return LESSTHANOREQUALTO; }
+ "!"       { return NOT; }
+"="       { return ASSIGN; }
 "?"       { return QUESTIONMARK; }
 ":"       { return COLON; }
 "&"       { return AMPERSAND; }
