@@ -1,6 +1,6 @@
 sum=0;
 product = 1;
-i=1;
+read(i);
 
 while (i < 3) {
     if (i % 100 > 0) { } else { print(i); };
@@ -22,7 +22,5 @@ print(c);
 
 d = 10 | 15;
 print(d);
-
-x = y;
 
 end
