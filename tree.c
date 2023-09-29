@@ -146,15 +146,15 @@ int execute(struct Node** p) {
 
     switch ((**p).type) {
         case ID:;
-            if (symtable[(**p).leaf_value].initialized) {
+            // if (symtable[(**p).leaf_value].initialized) {
                 struct Instruction* i = malloc(sizeof(struct Instruction));
                 i->operation = getOperation(rvalue);
                 i->argument = (**p).leaf_value;
                 addElement(array, i);
 
                 return symtable[(**p).leaf_value].value;
-            }
-            error("❗️ An uninitialized variable is used.\n");
+            // }
+            // error("❗️ An uninitialized variable is used.\n");
 
         case NUM:;
             struct Instruction* i2 = malloc(sizeof(struct Instruction));
