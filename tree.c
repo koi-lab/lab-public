@@ -317,6 +317,12 @@ int execute(struct Node** p) {
             } else {
                 execute(&((**p).args[1]));
             }
+
+        case READ:;
+            break;
+
+        case PRINT:;
+            break;
     }
 
     return GARBAGE;
