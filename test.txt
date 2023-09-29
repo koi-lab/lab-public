@@ -1,17 +1,21 @@
-sum=0;
-product = 1;
-read(i);
+0+0+1;
 
-while (i < 3) {
-    if (i % 100 > 0) { } else { print(i); };
-    sum = sum + i;
-    product = product * i;
-    i = i + 1;
+a = 1 * 0;
+
+if (1 == 1) {
+    2;
+}
+else {
+    3;
 };
-print(sum);
-print(product);
 
-a = 1 < 2 ? 100 : 200;
-print(a);
+while (100 % 1) {
+    1 + 0;
+};
+
+while (a < 3) {
+    a = a + 1;
+    0 + 0 + 1 * 0 + 999;
+};
 
 end

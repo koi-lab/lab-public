@@ -13,11 +13,12 @@
 %}
 
 %token <int_value> NUM ID
-%token <p> STATEMENTS IF WHILE DONE DIV MOD EQUAL QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON LCURLYBRACKET RCURLYBRACKET PRINT ELSE READ END
-%left EQUAL
+%token <p> STATEMENTS IF WHILE DONE DIV MOD ASSIGN QUESTIONMARK COLON PIPE AMPERSAND GREATERTHAN LESSTHAN PLUS MINUS STAR SLASH PERCENT CARET LPAREN RPAREN NEWLINE SEMICOLON LCURLYBRACKET RCURLYBRACKET PRINT ELSE READ END EQUALTO NOTEQUALTO GREATERTHANOREQUALTO LESSTHANOREQUALTO NOT
+%left ASSIGN
 %left QUESTIONMARK COLON
 %left PIPE AMPERSAND
-%left GREATERTHAN LESSTHAN
+%left EQUALTO NOTEQUALTO
+%left GREATERTHAN LESSTHAN GREATERTHANOREQUALTO LESSTHANOREQUALTO
 %left PLUS MINUS
 %left STAR SLASH DIV MOD PERCENT
 %left CARET
@@ -31,7 +32,7 @@
 
 %%
 
-start: statements { } END { array = malloc(sizeof(struct Array)); initialize(array); printf("\nOriginal tree:\n"); printTree($1, 0); execute(&$1); printf("Optimized tree:\n"); printTree($1, 0); } start DONE
+start: statements { } END { array = malloc(sizeof(struct Array)); initialize(array); printf("\n\n🎉 Original tree:\n"); printTree($1, 0); execute(&$1); printf("\n🎉 Optimized tree:\n"); printTree($1, 0); } start DONE
        | /* empty */
        ;
  
@@ -58,7 +59,13 @@ expr: LPAREN expr RPAREN                    { $$ = $2; }
     | expr MOD expr                         { $$ = makeNode(MOD, $1, $3, NULL); }
     | expr PERCENT expr                     { $$ = makeNode(PERCENT, $1, $3, NULL); }
     | expr CARET expr                       { $$ = makeNode(CARET, $1, $3, NULL); }
-    | expr EQUAL expr                       { $$ = makeNode(EQUAL, $1, $3, NULL); }
+        | expr EQUALTO expr                     { $$ = makeNode(EQUALTO, $1, $3, NULL); }
+     | expr NOTEQUALTO expr                  { $$ = makeNode(NOTEQUALTO, $1, $3, NULL); }
+     | expr GREATERTHANOREQUALTO expr        { $$ = makeNode(GREATERTHANOREQUALTO, $1, $3, NULL); }
+     | expr LESSTHANOREQUALTO expr            { $$ = makeNode(LESSTHANOREQUALTO, $1, $3, NULL); }
+     | NOT expr                              { $$ = makeNode(NOT, $1, NULL, NULL); }
+     | expr ASSIGN expr                      { $$ = makeNode(ASSIGN, $1, $3, NULL); }
+    | expr ASSIGN expr                       { $$ = makeNode(ASSIGN, $1, $3, NULL); }
     | NUM                                   { $$ = makeLeaf(NUM, $1); }
     | ID                                    { $$ = makeLeaf(ID, $1); }
     | PRINT LPAREN ID RPAREN                { $$ = makeNode(PRINT, makeLeaf(ID, $3), NULL, NULL); }

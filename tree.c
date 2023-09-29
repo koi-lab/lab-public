@@ -60,7 +60,7 @@ void printTree(struct Node* p, int level) {
         case MOD:;
             printf("MOD\n");
             break;
-        case EQUAL:;
+        case ASSIGN:;
             printf("=\n");
             break;
         case QUESTIONMARK:;
@@ -147,12 +147,12 @@ int execute(struct Node** p) {
     switch ((**p).type) {
         case ID:;
             // if (symtable[(**p).leaf_value].initialized) {
-                struct Instruction* i = malloc(sizeof(struct Instruction));
-                i->operation = getOperation(rvalue);
-                i->argument = (**p).leaf_value;
-                addElement(array, i);
+            struct Instruction* i = malloc(sizeof(struct Instruction));
+            i->operation = getOperation(rvalue);
+            i->argument = (**p).leaf_value;
+            addElement(array, i);
 
-                return symtable[(**p).leaf_value].value;
+            return symtable[(**p).leaf_value].value;
             // }
             // error("❗️ An uninitialized variable is used.\n");
 
@@ -167,9 +167,9 @@ int execute(struct Node** p) {
         case DIV:;
             int div0 = execute(&((**p).args[0]));
             int div1 = execute(&((**p).args[1]));
-            if (div0 == 0) {
+            if (div0 == 0 && ((**p).args[0]->type != ID)) {
                 *p = (**p).args[0];
-            } else if (div1 == 1) {
+            } else if (div1 == 1 && ((**p).args[1]->type != ID)) {
                 *p = (**p).args[1];
             };
 
@@ -180,19 +180,82 @@ int execute(struct Node** p) {
         case MOD:;
             int mod0 = execute(&((**p).args[0]));
             int mod1 = execute(&((**p).args[1]));
-            if (mod1 == 1) {
+            if (mod1 == 1 && ((**p).args[1]->type != ID)) {
                 *p = (**p).args[0];
             }
             int result2 = mod0 % mod1;
 
             return result2;
 
-        case EQUAL:;
+        case ASSIGN:;
             symtable[(**p).args[0]->leaf_value].value =
                 execute(&((**p).args[1]));
             symtable[(**p).args[0]->leaf_value].initialized = true;
 
             break;
+
+        case GREATERTHANOREQUALTO:;
+            int result32 = execute(&(**p).args[0]) >= execute(&(**p).args[1]);
+
+            struct Instruction* i32 = malloc(sizeof(struct Instruction));
+            i32->operation = getOperation(ge);
+            addElement(array, i32);
+
+            return result32;
+
+        case LESSTHANOREQUALTO:;
+            int result33 = execute(&(**p).args[0]) <= execute(&(**p).args[1]);
+
+            struct Instruction* i33 = malloc(sizeof(struct Instruction));
+            i33->operation = getOperation(le);
+            addElement(array, i33);
+
+            return result33;
+
+        case EQUALTO:;
+            int result34 = execute(&(**p).args[0]) == execute(&(**p).args[1]);
+
+            struct Instruction* i34 = malloc(sizeof(struct Instruction));
+            i34->operation = getOperation(eq);
+            addElement(array, i34);
+
+            return result34;
+
+        case NOTEQUALTO:;
+            int result35 = execute(&(**p).args[0]) != execute(&(**p).args[1]);
+
+            struct Instruction* i35 = malloc(sizeof(struct Instruction));
+            i35->operation = getOperation(ne);
+            addElement(array, i35);
+
+            return result35;
+
+        case NOT:;
+            int result36 = !execute(&(**p).args[0]);
+
+            struct Instruction* i36 = malloc(sizeof(struct Instruction));
+            i36->operation = getOperation(stackop_not);
+            addElement(array, i36);
+
+            return result36;
+
+        case PIPE:;
+            int result37 = execute(&(**p).args[0]) || execute(&(**p).args[1]);
+
+            struct Instruction* i37 = malloc(sizeof(struct Instruction));
+            i37->operation = getOperation(stackop_or);
+            addElement(array, i37);
+
+            return result37;
+
+        case AMPERSAND:;
+            int result38 = execute(&(**p).args[0]) && execute(&(**p).args[1]);
+
+            struct Instruction* i38 = malloc(sizeof(struct Instruction));
+            i38->operation = getOperation(stackop_and);
+            addElement(array, i38);
+
+            return result38;
 
         case GREATERTHAN:;
             int result3 = execute(&((**p).args[0])) > execute(&((**p).args[1]));
@@ -215,9 +278,9 @@ int execute(struct Node** p) {
         case PLUS:;
             int plus0 = execute(&((**p).args[0]));
             int plus1 = execute(&((**p).args[1]));
-            if (plus0 == 0) {
+            if (plus0 == 0 && ((**p).args[0]->type != ID)) {
                 *p = (**p).args[1];
-            } else if (plus1 == 0) {
+            } else if (plus1 == 0 && ((**p).args[1]->type != ID)) {
                 *p = (**p).args[0];
             };
 
@@ -232,7 +295,7 @@ int execute(struct Node** p) {
         case MINUS:;
             int minus0 = execute(&((**p).args[0]));
             int minus1 = execute(&((**p).args[1]));
-            if (minus1 == 0) {
+            if (minus1 == 0 && ((**p).args[1]->type != ID)) {
                 *p = (**p).args[0];
             };
 
@@ -247,11 +310,13 @@ int execute(struct Node** p) {
         case STAR:;
             int star0 = execute(&((**p).args[0]));
             int star1 = execute(&((**p).args[1]));
-            if (star0 * star1 == 0) {
+            if (star0 == 0 && ((**p).args[0]->type != ID)) {
                 *p = makeLeaf(NUM, 0);
-            } else if (star0 == 1) {
+            } else if (star1 == 0 && ((**p).args[1]->type != ID)) {
+                *p = makeLeaf(NUM, 0);
+            } else if (star0 == 1 && ((**p).args[0]->type != ID)) {
                 *p = (**p).args[1];
-            } else if (star1 == 1) {
+            } else if (star1 == 1 && ((**p).args[1]->type != ID)) {
                 *p = (**p).args[0];
             };
 
@@ -262,9 +327,9 @@ int execute(struct Node** p) {
         case SLASH:;
             int slash0 = execute(&((**p).args[0]));
             int slash1 = execute(&((**p).args[1]));
-            if (slash0 == 0) {
+            if (slash0 == 0 && ((**p).args[0]->type != ID)) {
                 *p = (**p).args[0];
-            } else if (slash1 == 1) {
+            } else if (slash1 == 1 && ((**p).args[1]->type != ID)) {
                 *p = (**p).args[1];
             };
 
@@ -275,7 +340,7 @@ int execute(struct Node** p) {
         case PERCENT:;
             int percent0 = execute(&((**p).args[0]));
             int percent1 = execute(&((**p).args[1]));
-            if (percent1 == 1) {
+            if (percent1 == 1 && ((**p).args[1]->type != ID)) {
                 *p = (**p).args[0];
             }
 
@@ -290,7 +355,10 @@ int execute(struct Node** p) {
             break;
 
         case IF:;
-            if (execute(&((**p).args[0]))) {
+            if (((**p).args[0]->type == ID) || ((**p).args[1]->type == ID)) {
+                execute(&((**p).args[1]));
+                execute(&((**p).args[2]));
+            } else if (execute(&((**p).args[0]))) {
                 execute(&((**p).args[1]));
                 *p = (**p).args[1];
             } else {
@@ -301,7 +369,10 @@ int execute(struct Node** p) {
             break;
 
         case TERNARY:;
-            if (execute(&((**p).args[0]))) {
+            if (((**p).args[0]->type == ID) || ((**p).args[1]->type == ID)) {
+                execute(&((**p).args[1]));
+                execute(&((**p).args[2]));
+            } else if (execute(&((**p).args[0]))) {
                 execute(&((**p).args[1]));
                 *p = (**p).args[1];
             } else {
@@ -312,7 +383,9 @@ int execute(struct Node** p) {
             break;
 
         case WHILE:;
-            if (!(**p).args[0]) {
+            if (((**p).args[0]->type == ID) || ((**p).args[1]->type == ID)) {
+                execute(&((**p).args[1]));
+            } else if (!execute(&(**p).args[0])) {
                 *p = NULL;
             } else {
                 execute(&((**p).args[1]));
