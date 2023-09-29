@@ -186,6 +186,7 @@ int execute(struct Node* p) {
           }
 
           symtable[p->args[0]->leaf_value].value = execute(p->args[1]);
+          symtable[p->args[0]->leaf_value].initialized = true;
           return GARBAGE;
 
         case TERNARY:
@@ -240,7 +241,7 @@ int execute(struct Node* p) {
           printf("%d\n", symtable[p->args[0]->leaf_value].value);
           break;
 
-        case READ:
+        case READ: ;
           int temp;
           printf("Enter an integer: ");
           scanf(" %d", &temp);
